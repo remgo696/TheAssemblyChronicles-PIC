@@ -1,0 +1,8 @@
+# Archivos generados por MPLAB X
+nbproject/private/
+build/
+dist/
+*.hex
+*.elf
+*.map
+*.obj
