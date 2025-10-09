@@ -20,6 +20,7 @@ Repositorio educativo con prácticas en ensamblador para el microcontrolador **P
 - Registros **SFR**, **GPR** y bancos de memoria  
 - **STATUS Register** y banderas del ALU  
 - Instrucciones básicas y modos de direccionamiento  
+- Tiempo de instrucción y frecuencia del sistema
 
 ---
 
@@ -33,7 +34,6 @@ Repositorio educativo con prácticas en ensamblador para el microcontrolador **P
 ---
 
 ### 🟩 Unidad 4 – Temporizadores
-- Tiempo de instrucción y frecuencia del sistema  
 - **TMR0**, **TMR1**, **TMR2**: diferencias y configuración básica  
 - Generación de retardos con **TMR0**  
 - Base de tiempo y eventos periódicos  
