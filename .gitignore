@@ -1,4 +1,4 @@
-# Archivos generados por MPLAB X
+# ── MPLAB X ──────────────────────────────────
 nbproject/private/
 build/
 dist/
@@ -6,3 +6,18 @@ dist/
 *.elf
 *.map
 *.obj
+
+# ── Python / Pipenv ─────────────────────────
+__pycache__/
+*.py[cod]
+*.egg-info/
+.venv/
+venv/
+Pipfile.lock
+
+# ── MkDocs ───────────────────────────────────
+site/
+
+# ── OS ───────────────────────────────────────
+.DS_Store
+Thumbs.db

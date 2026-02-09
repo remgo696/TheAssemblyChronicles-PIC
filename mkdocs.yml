@@ -1,0 +1,134 @@
+# ──────────────────────────────────────────────
+#  TheAssemblyChronicles-PIC  ·  MkDocs Config
+# ──────────────────────────────────────────────
+
+site_name: The Assembly Chronicles – PIC
+site_url: https://remgo696.github.io/TheAssemblyChronicles-PIC/
+site_description: >-
+  Guía técnica de referencia para microcontroladores PIC18F57Q43 y PIC18F47Q10
+  en Assembly — curso Microcontroladores (1AEL0256), UPC.
+site_author: David Díaz
+copyright: Copyright &copy; 2025 – 2026 David Díaz
+
+repo_name: remgo696/TheAssemblyChronicles-PIC
+repo_url: https://github.com/remgo696/TheAssemblyChronicles-PIC
+
+# ── Theme ────────────────────────────────────
+theme:
+  name: material
+  language: es
+  palette:
+    - media: "(prefers-color-scheme: light)"
+      scheme: default
+      primary: indigo
+      accent: teal
+      toggle:
+        icon: material/brightness-7
+        name: Cambiar a modo oscuro
+    - media: "(prefers-color-scheme: dark)"
+      scheme: slate
+      primary: indigo
+      accent: teal
+      toggle:
+        icon: material/brightness-4
+        name: Cambiar a modo claro
+  font:
+    text: Inter
+    code: JetBrains Mono
+  icon:
+    repo: fontawesome/brands/github
+    logo: material/memory
+  features:
+    - navigation.tabs
+    - navigation.tabs.sticky
+    - navigation.sections
+    - navigation.top
+    - navigation.footer
+    - search.suggest
+    - search.highlight
+    - content.code.copy
+    - content.code.annotate
+    - toc.follow
+
+# ── Navigation ───────────────────────────────
+nav:
+  - Inicio: index.md
+  - Teoría:
+    - teoria/index.md
+    - Temporizadores: teoria/temporizadores.md
+    - Interrupciones: teoria/interrupciones.md
+  - Proyectos:
+    - proyectos/index.md
+  - Recursos:
+    - recursos/index.md
+
+# ── Markdown Extensions ──────────────────────
+markdown_extensions:
+  # Admonitions (notas, alertas, tips)
+  - admonition
+  - pymdownx.details
+
+  # Code highlighting (Assembly, C, etc.)
+  - pymdownx.highlight:
+      anchor_linenums: true
+      line_spans: __span
+      pygments_lang_class: true
+  - pymdownx.inlinehilite
+
+  # Super fences (mermaid, nested code blocks)
+  - pymdownx.superfences:
+      custom_fences:
+        - name: mermaid
+          class: mermaid
+          format: !!python/name:pymdownx.superfences.fence_code_format
+
+  # Math (MathJax)
+  - pymdownx.arithmatex:
+      generic: true
+
+  # Tabs
+  - pymdownx.tabbed:
+      alternate_style: true
+
+  # Task lists
+  - pymdownx.tasklist:
+      custom_checkbox: true
+
+  # Emoji / icons
+  - pymdownx.emoji:
+      emoji_index: !!python/name:material.extensions.emoji.twemoji
+      emoji_generator: !!python/name:material.extensions.emoji.to_svg
+
+  # Keys (keyboard shortcuts)
+  - pymdownx.keys
+
+  # Misc
+  - attr_list
+  - md_in_html
+  - tables
+  - def_list
+  - footnotes
+  - abbr
+  - toc:
+      permalink: true
+
+# ── Extra JavaScript (MathJax) ───────────────
+extra_javascript:
+  - assets/js/mathjax.js
+  - https://unpkg.com/mathjax@3/es5/tex-mml-chtml.js
+
+# ── Extra CSS ────────────────────────────────
+extra_css:
+  - assets/css/custom.css
+
+# ── Plugins ──────────────────────────────────
+plugins:
+  - search:
+      lang: es
+
+# ── Extra (social links, etc.) ───────────────
+extra:
+  social:
+    - icon: fontawesome/brands/github
+      link: https://github.com/remgo696
+      name: GitHub

@@ -1,93 +1,76 @@
-# 🧠 TheAssemblyChronicles-PIC
-## Guia del PIC18F57Q43
+# 🧠 The Assembly Chronicles – PIC
 
-Repositorio educativo con prácticas en ensamblador para el microcontrolador **PIC18F57Q43**, orientado a consolidar los fundamentos vistos en el curso y facilitar la consulta rápida de cada tema. El material está diseñado para estudiantes de **Ingeniería Electrónica**, **Mecatrónica** y **Biomédica** que cursan la asignatura de **1AEL0256 Microcontroladores** en la UPC, y está basado en el [material del curso](https://github.com/tocache/Microchip-PIC18F57Q43).
+> **Guía técnica de referencia para microcontroladores PIC18F57Q43 y PIC18F47Q10 en Assembly**
 
----
+[![Deploy MkDocs](https://github.com/remgo696/TheAssemblyChronicles-PIC/actions/workflows/publish.yml/badge.svg)](https://github.com/remgo696/TheAssemblyChronicles-PIC/actions/workflows/publish.yml)
 
-## 📘 Temario
-
-### 🟩 Unidad 1 – Introducción y entorno de trabajo
-- Conceptos básicos de microcontroladores 
-- Entorno **MPLAB X IDE** y **PIC AS Assembler**  
-- Configuración de bits (**CONFIG**) y cabeceras (`.inc`)
+📖 **Sitio en vivo:** [https://remgo696.github.io/TheAssemblyChronicles-PIC/](https://remgo696.github.io/TheAssemblyChronicles-PIC/)
 
 ---
 
-### 🟩 Unidad 2 – Arquitectura interna del PIC18F57Q43
-- Bloques principales y flujo de datos  
-- Memorias internas: **Flash de programa**, **EEPROM** y **SRAM**  
-- Registros **SFR**, **GPR** y bancos de memoria  
-- **STATUS Register** y banderas del ALU  
-- Instrucciones básicas y modos de direccionamiento  
-- Tiempo de instrucción y frecuencia del sistema
+## Sobre este proyecto
+
+Este repositorio consolida los fundamentos de programación en Assembly para microcontroladores PIC de la familia 18F. Está diseñado como una referencia rápida y práctica, orientado a estudiantes de **Ingeniería Electrónica**, **Mecatrónica** y **Biomédica** de la UPC, y basado en el [material del curso](https://github.com/tocache/Microchip-PIC18F57Q43).
+
+## Estructura del repositorio
+
+```
+.
+├── docs/                          # Fuente de la documentación (MkDocs)
+│   ├── index.md                   # Página de inicio
+│   ├── teoria/                    # Fundamentos teóricos
+│   │   ├── temporizadores.md
+│   │   └── interrupciones.md
+│   ├── proyectos/                 # Ejemplos y proyectos prácticos
+│   ├── recursos/                  # Datasheets y herramientas
+│   └── assets/                    # Imágenes, CSS y JS
+├── mkdocs.yml                     # Configuración de MkDocs
+├── Pipfile                        # Dependencias Python (Pipenv)
+├── .github/workflows/publish.yml  # CI/CD → GitHub Pages
+└── LICENSE
+```
+
+## Desarrollo local
+
+### Requisitos previos
+
+- Python 3.12+
+- [Pipenv](https://pipenv.pypa.io/)
+
+### Instalación
+
+```bash
+# Clonar el repositorio
+git clone https://github.com/remgo696/TheAssemblyChronicles-PIC.git
+cd TheAssemblyChronicles-PIC
+
+# Instalar dependencias
+pipenv install
+
+# Levantar el servidor de desarrollo
+pipenv run mkdocs serve
+```
+
+El sitio estará disponible en `http://127.0.0.1:8000`.
+
+### Build de producción
+
+```bash
+pipenv run mkdocs build
+```
+
+Los archivos estáticos se generarán en la carpeta `site/`.
+
+## Despliegue
+
+El sitio se despliega **automáticamente** a GitHub Pages en cada push a la rama `main` mediante GitHub Actions. La URL del sitio es:
+
+> [https://remgo696.github.io/TheAssemblyChronicles-PIC/](https://remgo696.github.io/TheAssemblyChronicles-PIC/)
+
+## Licencia
+
+Este proyecto está bajo la licencia [MIT](LICENSE).
 
 ---
 
-### 🟩 Unidad 3 – E/S digitales
-- Configuración de pines: `TRIS`, `LAT`, `PORT`, `ANSEL`  
-- Entradas con *weak pull-ups*  
-- Botones y antirrebote (software y hardware)  
-- Displays de 7 segmentos y multiplexado  
-- Uso de macros y `CBLOCK` para variables  
-
----
-
-### 🟩 Unidad 4 – Temporizadores
-- **TMR0**, **TMR1**, **TMR2**: diferencias y configuración básica  
-- Generación de retardos con **TMR0**  
-- Base de tiempo y eventos periódicos  
-- Introducción a interrupciones por **TMR0**  
-
----
-
-### 🟩 Unidad 5 – Interrupciones
-- Vector de interrupción y `RETFIE`  
-- INT, IOC y temporizadores  
-- Priorización, banderas y habilitación global  
-- Diseño de rutinas ISR eficientes  
-- Ejemplo: control de LED o contador con botón  
-
----
-
-### 🟩 Unidad 6 – Osciladores y configuración del reloj
-- Tipos de osciladores (**HFINTOSC**, **LFINTOSC**, **EXTOSC**, **PLL**)  
-- Configuración con `OSCCON1`, `OSCFRQ` y `OSCEN`  
-- Cálculo de frecuencias y divisores (`NDIV`)  
-- Selección del reloj y estabilidad  
-
----
-
-### 🟩 Unidad 7 – Periféricos avanzados
-- Módulo **PPS (Peripheral Pin Select)**  
-- Introducción al **EUSART**  
-- PWM básico con **TMR2** y **CCP**  
-- Conceptos de **ADC** y configuración básica  
-- Comunicación con sensores simples  
-
----
-
-### 🟩 Unidad 8 – Memoria no volátil
-- Acceso a **EEPROM** (`NVMCON`, `NVMDAT`, `NVMADR`)  
-- Lectura/escritura en memoria de programa con `TBLPTR` y `TABLAT`  
-- Almacenamiento de datos o configuraciones persistentes  
-
----
-
-### 🟩 Unidad 9 – Estructuras lógicas
-- Máquinas de estados (**Moore** y **Mealy**)  
-- Tablas de búsqueda (`TBLRD`, `RETLW`)  
-- Implementación de menús y modos de operación  
-
----
-
-### 🟩 Unidad 10 – Buenas prácticas y documentación
-- Organización de proyectos en MPLAB  
-- Uso de **Git** y control de versiones  
-- Estructura de repositorios educativos  
-- Comentarios, macros y estilo de código  
-- Depuración con simulador y Curiosity Nano  
-
----
-
-> ‼️ Este repositorio busca servir como guía de referencia rápida y no como un curso completo. Se recomienda complementar este material con la documentación oficial y otros recursos educativos.
+> ‼️ Este repositorio busca servir como guía de referencia rápida y no como un curso completo. Se recomienda complementar este material con la documentación oficial de [Microchip](https://www.microchip.com/).
