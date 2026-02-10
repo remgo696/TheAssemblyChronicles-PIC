@@ -55,6 +55,7 @@ nav:
   - Inicio: index.md
   - Teoría:
     - teoria/index.md
+    - Introducción: teoria/introduccion.md
     - Temporizadores: teoria/temporizadores.md
     - Interrupciones: teoria/interrupciones.md
   - Proyectos:

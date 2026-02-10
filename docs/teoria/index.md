@@ -5,15 +5,13 @@ description: Fundamentos teóricos del PIC18F57Q43 — arquitectura, temporizado
 
 # :material-school: Teoría
 
-Sección dedicada a los **fundamentos teóricos** de los microcontroladores PIC18F. Cada artículo incluye diagramas de bloques del datasheet, tablas de registros con descripciones de cada bit y fórmulas de cálculo.
-
----
-
 ## Contenido disponible
 
 | Tema | Descripción |
 |:--|:--|
-| [Temporizadores](temporizadores.md) | TMR0 en modo 8 y 16 bits — registros, fórmulas y configuración |
+| [Introducción](introduccion.md) | Definición de microcontrolador y uso básico del MPLAB X IDE |
+| [Arquitectura de un PIC18F](arquitectura.md) | Cómo se relaciona el µ con sus registros, memoria y periféricos |
+| [Temporizadores](temporizadores.md) | TMR0/1/2 — registros, fórmulas y configuración |
 | [Interrupciones](interrupciones.md) | Vectores, prioridades, banderas y diseño de ISR |
 
 ---
@@ -24,8 +22,6 @@ Sección dedicada a los **fundamentos teóricos** de los microcontroladores PIC1
 
     Los siguientes temas se irán incorporando progresivamente:
 
-    - [ ] Introducción y entorno de trabajo (MPLAB X, PIC AS)
-    - [ ] Arquitectura interna del PIC18F57Q43
     - [ ] E/S digitales (`TRIS`, `LAT`, `PORT`, `ANSEL`)
     - [ ] Osciladores y configuración del reloj
     - [ ] Periféricos avanzados (PPS, EUSART, PWM, ADC)
