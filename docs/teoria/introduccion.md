@@ -3,7 +3,7 @@ title: Introducción y Entorno de Trabajo
 description: Configuración de MPLAB X IDE y PIC AS Assembler para desarrollo con PIC18F
 keywords:
   - MPLAB X IDE
-  - PIC AS Assembler
+  - XC8
   - PIC18F57Q43
   - PIC18F47Q10
   - microcontrolador
@@ -67,15 +67,40 @@ Aquí, siempre damos "Siguiente". Luego, te pedirán elegir tu dispositivo (PIC1
 Lo que sigue es elegir el compilador. En la primera parte del curso usaremos el lenguaje ensamblador (pic-as), pero luego pasaremos a C (xc8). Elige el que corresponda y dale "Siguiente".
 
 <figure markdown="span" style="text-align: center;">
-  ![NewProject_ChooseDevice](../assets/images/Intro_new_project3.png){width="80%"}
+  ![NewProject_ChooseCompiler](../assets/images/Intro_new_project3.png){width="80%"}
   <figcaption>Paso 3: Selección del compilador</figcaption>
 </figure>
 
 Finalmente, elige un nombre para tu proyecto y la ubicación donde se guardará. Puede que parezca el paso más trivial, pero si eliges una ubicación con espacios o caracteres especiales, podrías tener problemas más adelante. De preferencia, usa la ruta por defecto con un nombre de proyecto con nomenclatura CamelCase o snake_case. Luego, deselecciona "Abrir Open MCC al finalizar", haz clic en "Finalizar" y listo, ya tienes tu proyecto creado.
 
 <figure markdown="span" style="text-align: center;">
-  ![NewProject_ChooseDevice](../assets/images/Intro_new_project4.png){width="80%"}
+  ![NewProject_ChooseName](../assets/images/Intro_new_project4.png){width="80%"}
   <figcaption>Paso 4: Nombre y ubicación del proyecto</figcaption>
 </figure>
 
 Por si vas a crear el proyecto en MPLAB X IDE, pero editar los archivos en VSCode, te recomiendo que cambies el encoding UTF-8, ya que por defecto está seleccionado el ISO-8859-1, lo que puede generar problemas con las tildes y eñes.
+
+### Instalar Proteus
+
+Proteus es un software de pago (con opción de prueba que no te permite guardar archivos). Y, para que simule el PIC18F57Q10, necesitas la versión paga. 
+Si vendes un riñón o haces magia negra para conseguirlo, no es mi responsabilidad. Pero, si quieres aprobar el curso... Instalalo.
+
+## Etapas de desarrollo
+Cuando desarrollas un programa para un µC, lo que se escribe en su memoria de programa no es el texto que tú ves en el editor de código. En realidad, el µC solo entiende instrucciones en binario. Por esto, tu código fuente debe pasar por estas 3 etapas antes de ser grabado en tu µC.
+### Build Time
+Aquí es donde actúan las *directivas* (instrucciones para el software ensamblador pic-as y el Linker xc8-cc). Esto ocurre en tu PC cuando compilas.
+- Assembly Time (Traducción):
+
+Por ejemplo, `EQU` o `#define`, son reemplazos de texto o asignación de valores constantes. Por esto , en `LED_PIN EQU 5`, el ensamblador busca donde dice LED_PIN y pone un 5. 
+Otro ejemplo es `#include`, que copia y pega texto de otro archivo.
+
+- Link Time (Organización de Memoria):
+
+Por ejemplo, `PSECT` (o el antiguo `ORG`). Le dice al Linker: "Reserva este espacio en la memoria RAM" o "Coloca las siguientes instrucciones a partir de la dirección `0x0020` de la Flash".
+Otro ejemplo es `GLOBAL` y `EXTRN`, que le dicen al Linker cómo conectar variables entre diferentes archivos .s.
+
+### Programming Time
+Este es un tiempo intermedio exclusivo de los microcontroladores. Ocurre cuando el programador (PICkit) quema el hex en el chip. Aquí, se graba la memoria de programa y los bits de configuración (fuses) del PIC.
+
+### Runtime
+Aquí es cuando recién se ejecutan las *instrucciones*. Esto ocurre cuando se energiza el µC. El µC lee la instrucción de la memoria de programa que apunta el contador de programa (PC), iniciando desde la dirección `00 0000h`, las decodifica y ejecuta.

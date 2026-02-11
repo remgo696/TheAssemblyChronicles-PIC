@@ -8,7 +8,9 @@ site_description: >-
   Guía técnica de referencia para microcontroladores PIC18F57Q43 y PIC18F47Q10
   en Assembly — curso Microcontroladores (1AEL0256), UPC.
 site_author: David Díaz
-copyright: Copyright &copy; 2025 – 2026 David Díaz
+copyright: >
+  Copyright &copy; 2025 – 2026 David Díaz · 
+  Favicon by <a href="https://www.flaticon.com/free-icons/microcontroller" title="microcontroller icons">Bombasticon Studio</a> from Flaticon
 
 repo_name: remgo696/TheAssemblyChronicles-PIC
 repo_url: https://github.com/remgo696/TheAssemblyChronicles-PIC
@@ -17,6 +19,7 @@ repo_url: https://github.com/remgo696/TheAssemblyChronicles-PIC
 theme:
   name: material
   language: es
+  favicon: assets/images/microchip.ico
   palette:
     - media: "(prefers-color-scheme: light)"
       scheme: default
@@ -56,6 +59,7 @@ nav:
   - Teoría:
     - teoria/index.md
     - Introducción: teoria/introduccion.md
+    - Arquitectura: teoria/arquitectura.md
     - Temporizadores: teoria/temporizadores.md
     - Interrupciones: teoria/interrupciones.md
   - Proyectos:
@@ -65,6 +69,9 @@ nav:
 
 # ── Markdown Extensions ──────────────────────
 markdown_extensions:
+  # Referencias (notas al pie, etc.)
+  - footnotes
+
   # Admonitions (notas, alertas, tips)
   - admonition
   - pymdownx.details
@@ -124,6 +131,7 @@ extra_css:
 
 # ── Plugins ──────────────────────────────────
 plugins:
+  - macros
   - search:
       lang: es
 
@@ -133,3 +141,7 @@ extra:
     - icon: fontawesome/brands/github
       link: https://github.com/remgo696
       name: GitHub
+  extra:
+    # Definición de tus variables globales
+    datasheet_q43: https://ww1.microchip.com/downloads/aemDocuments/documents/MCU08/ProductDocuments/DataSheets/PIC18F27-47-57Q43-Microcontroller-Data-Sheet-XLP-DS40002147.pdf
+    datasheet_q10: https://ww1.microchip.com/downloads/aemDocuments/documents/MCU08/ProductDocuments/DataSheets/PIC18F27-47Q10-Micorcontroller-Data-Sheet-DS40002043.pdf
