@@ -1,0 +1,30 @@
+/* ─────────────────────────────────────────────
+   The Assembly Chronicles – PIC  ·  Custom CSS
+   ───────────────────────────────────────────── */
+
+/* Landing page buttons alignment */
+.md-typeset .md-button {
+  margin-right: 0.5rem;
+  margin-bottom: 0.5rem;
+}
+
+/* Slightly reduce table font size for register tables */
+.md-typeset table:not([class]) th,
+.md-typeset table:not([class]) td {
+  padding: 0.6rem 0.8rem;
+}
+
+/* Improved figure captions */
+.md-typeset figcaption {
+  font-size: 0.8rem;
+  font-style: italic;
+  color: var(--md-default-fg-color--light);
+  text-align: center;
+  margin-top: 0.5rem;
+}
+
+/* Definition list styling for register descriptions */
+.md-typeset dt {
+  font-weight: 700;
+  font-family: "JetBrains Mono", monospace;
+}
