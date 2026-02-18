@@ -61,7 +61,7 @@ O sea, que en la dirección `00h` (vector de reset) se coloca la instrucción de
 ```assembly
   ORG 00h ; La siguiente instrucción estará en el vector de reset
   bra main ; Salto a donde empieza el programa
-  ORG 1Ah ; La siguiente instrucción estará en la dirección 1Ah
+  ORG 1Ah ; La siguiente instrucción estará en la dirección 1Ah 
 main:
   ; Aquí va el código del programa
 ```
@@ -79,6 +79,6 @@ main:
 
 
 ## Referencias
-[^1]: Microchip Technology Inc. (2020). *PIC18F27/47Q10 Microcontroller Data Sheet*. Sección 2.3, "Details on Individual Family Members". [Ver PDF (Pág. 18)](https://ww1.microchip.com/downloads/aemDocuments/documents/MCU08/ProductDocuments/DataSheets/PIC18F27-47Q10-Micorcontroller-Data-Sheet-DS40002043.pdf#page=18).
-[^2]: Microchip Technology Inc. (2024). *PIC18F57Q43 Microcontroller Data Sheet*. Sección 7, "PIC18 CPU". [Ver PDF (Pág. 28)](https://ww1.microchip.com/downloads/aemDocuments/documents/MCU08/ProductDocuments/DataSheets/PIC18F27-47-57Q43-Microcontroller-Data-Sheet-XLP-DS40002147.pdf#page=28).
+[^1]: {{ q10('2.3', 18) }}
+[^2]: {{ q43('7', 28) }}
 [^3]: {{ q10('11.1', 108) }}

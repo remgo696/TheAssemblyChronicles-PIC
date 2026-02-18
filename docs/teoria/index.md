@@ -13,17 +13,17 @@ description: Fundamentos teóricos del PIC18F57Q43 — arquitectura, temporizado
 | [Arquitectura de un PIC18F](arquitectura.md) | Cómo se relaciona el µC con sus registros, memoria y periféricos |
 | [Temporizadores](temporizadores.md) | TMR0/1/2 — registros, fórmulas y configuración |
 | [Interrupciones](interrupciones.md) | Vectores, prioridades, banderas y diseño de ISR |
+| [CCP](ccp.md) | Configuración del módulo CCP en modo PWM |
 
 ---
 
 ## Temas por agregar
 
-!!! note "En construcción"
+??? note "En construcción"
 
     Los siguientes temas se irán incorporando progresivamente:
 
-    - [ ] E/S digitales (`TRIS`, `LAT`, `PORT`, `ANSEL`)
-    - [ ] Osciladores y configuración del reloj
-    - [ ] Periféricos avanzados (PPS, EUSART, PWM, ADC)
-    - [ ] Memoria no volátil (EEPROM, Flash)
-    - [ ] Estructuras lógicas y máquinas de estado
+    - [ ] Osciladores (configuración del reloj)
+    - [ ] Interrupciones
+    - [ ] Celdas lógica configurable
+    - [ ] Convertidor analógico-digital (ADC²)
