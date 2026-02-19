@@ -62,6 +62,7 @@ nav:
     - Arquitectura: teoria/arquitectura.md
     - Temporizadores: teoria/temporizadores.md
     - Interrupciones: teoria/interrupciones.md
+    - CCP: teoria/ccp.md
   - Proyectos:
     - proyectos/index.md
   - Recursos:
