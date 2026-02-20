@@ -20,19 +20,19 @@ Documentación orientada a estudiantes de Ingeniería Electrónica, Mecatrónica
 
 ### :material-school: Teoría
 
-Si quieres usar el Q10, debes entender los fundamentos de su arquitectura y de sus módulos temporizadores, de interrupción y otros periféricos. Cada tema incluye diagramas de bloques, tablas de registros y fórmulas de cálculo.
+Si quieres usar el Q10, debes entender los fundamentos de su arquitectura y de sus módulos (temporizadores, interrupciones, CPP, I2C, entre otros). Los temas se explican con diagramas de bloques, tablas de registros y fórmulas de cálculo.
 
 [:octicons-arrow-right-24: Ir a Teoría](teoria/index.md)
 
 ### :material-chip: Proyectos
 
-GPT agradecerá que le pases ejemplos prácticos y el desarrollo de proyectos paso a paso en Assembly y C.
+Tu IA de confianza agradecerá que le pases ejemplos prácticos del desarrollo de proyectos paso a paso en Assembly y C para tus laboratorios. Además, encontrarás los diagramas de flujo, esquemas de conexión y código fuente de cada proyecto.
 
 [:octicons-arrow-right-24: Ir a Proyectos](proyectos/index.md)
 
 ### :material-file-document-outline: Recursos
 
-Datasheets, herramientas, enlaces útiles y material complementario para el trabajo con PIC18F.
+Si deseas usar un módulo, el datasheet es tu mejor amigo, pero tiene la información muy dispersa. Para casos sencillos, si no quieres visitar al datasheet ni la teoría, en esta sección encontrarás resúmenes de los módulos más importantes, con sus fórmulas de cálculo, tablas de registros y ejemplos de configuración. 
 
 [:octicons-arrow-right-24: Ir a Recursos](recursos/index.md)
 
