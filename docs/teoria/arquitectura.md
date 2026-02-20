@@ -53,12 +53,12 @@ En la tabla anterior se muestra que ambos µC tienen 64 kW (1 word $=$ 2 bytes) 
 
 En el Q10, la memoria de programa abarca el rango de direcciones desde `00 0000h` hasta `01 FFFFh`. Y, como se muestra en la tabla siguiente, también incluye los vectores de interrupción y el vector de reset.
 El vector de reset es la dirección a la que el µC salta para iniciar la ejecución del programa después de un reinicio. En la mayoría de los casos (el Q10 y Q43 inclusive), esta dirección es `00 0000h`. Por esto, es común colocar una instrucción de salto en `00 0000h` que redirija a la dirección donde realmente se encuentra el programa. Pero, ¿dónde debería empezar el programa? Al menos, no debe de interponerse con los vectores de interrupción. Por lo tanto, el programa del Q10 puede empezar a partir de `00 001Ah` o más allá. En pic-as (ensamblador), esto se traduce en:
-```assembly
+```asm
   ORG 00h ; La siguiente instrucción estará en el vector de reset
   bra 1Ah ; Salto a donde empieza el programa
 ```
 O sea, que en la dirección `00h` (vector de reset) se coloca la instrucción de salto (`bra`) que redirige a la dirección `1Ah`, donde realmente empieza el programa. Aunque, por razones de estilo, algunos profesores prefieren colocar el programa a partir de `00 0020h` o `00 0100h`. Además, se puede usar una etiqueta para marcar el inicio del programa, como `inicio`, y luego usar esa etiqueta en la instrucción de salto:
-```assembly
+```asm
   ORG 00h ; La siguiente instrucción estará en el vector de reset
   bra main ; Salto a donde empieza el programa
   ORG 1Ah ; La siguiente instrucción estará en la dirección 1Ah 
