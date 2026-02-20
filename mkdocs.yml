@@ -67,6 +67,7 @@ nav:
     - proyectos/index.md
   - Recursos:
     - recursos/index.md
+    - CCP-PWM: recursos/ccp_pwm.md
 
 # ── Markdown Extensions ──────────────────────
 markdown_extensions:

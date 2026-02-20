@@ -11,7 +11,7 @@ A continuación, encontrarás resúmenes de los módulos más importantes, con s
 
 | Módulo | Descripción |
 |:--|:--|
-| [CCP](/ccp.md) | Módulo de captura, comparación y PWM |
+| [CCP](ccp_pwm.md) | Módulo de captura, comparación y PWM |
 
 ---
 
