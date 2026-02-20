@@ -77,7 +77,7 @@ Pero, normalmente, sabes el tiempo en activo que quieres generar. Así que, pued
 
 $$CCPRx\text{ value} = \frac{T_{ON} \times F_{osc}}{TMRx\text{ PreScaler}}$$
 
-### Pasos para configurar el modo PWM
+### Pasos para configurar el modo PWM: Forma segura
 
 Como guía práctica, Microchip recomienda seguir los siguientes pasos para generar una señal PWM como salida en un pin[^setup_pwm]:
 
@@ -103,6 +103,7 @@ Como guía práctica, Microchip recomienda seguir los siguientes pasos para gene
 
     ??? example "Ejemplo: Configuración del PPS"
         Para el Q10: Si quieres usar el CCP1, veo en la tabla qué puertos puedo usar (RB o RC)[^CCP_codes_Q10]. Usaré el pin RC0: 
+
         ```c
         RC0PPS = 0x05;          // RC0 -> CCP1
         TRISCbits.TRISC0 = 1;   // RC0 como entrada
@@ -146,13 +147,13 @@ Como guía práctica, Microchip recomienda seguir los siguientes pasos para gene
         Para el Q10: Al configurar el modo PWM, aprovecha en configurar el formato justificado a la izquierda (`FMT = 1`) si así lo deseas:
 
         ```c
-        CCP1CON = 0x1C;         // Modo PWM, justificado a la izquierda
+        CCP1CON = 0x9C;         // Modo PWM, justificado a la izquierda
         ```
         ```asm
-        movlw 0x1C              ; 0001 1100
+        movlw 0x9C              ; 1001 1100
         movwf CCP1CON, a        ; Modo PWM, justificado a la izquierda
         ```
-        Obviamente, si deseas el formato justificado a la derecha, solo reemplaza el valor `0x1C` por `0x0C` (0000 1100).
+        Obviamente, si deseas el formato justificado a la derecha, solo reemplaza el valor `0x9C` por `0x8C` (0000 1100).
 
 4. Configura el registro `CCPRxH` y `CCPRxL` con el valor que define el duty cycle de la señal PWM.
 
@@ -162,6 +163,7 @@ Como guía práctica, Microchip recomienda seguir los siguientes pasos para gene
         $$CCPRx\text{ value} = \frac{T_{ON} \times F_{osc}}{TMRx\text{ prescaler}} = \frac{50\ \mu s \times 4\ MHz}{1} = 200 = 0011\ 0010\ 00_{(2)}$$
 
         He separado el valor de `CCPRx` en 10 bits para mostrar cómo se asignan los bits a `CCPRxH` y `CCPRxL` con el formato justificado a la izquierda (`FMT = 1`):
+
         ```c
         CCPR1H = 0x32;
         CCPR1L = 0;             // Duty cycle = 25%
@@ -199,6 +201,7 @@ Como guía práctica, Microchip recomienda seguir los siguientes pasos para gene
 
     ??? example "Ejemplo: Configuración del TMRx"
         Para el Q10: Sigo el ejemplo del uso del TMR2.
+
         ```c
         PIR4bits.TMR2IF = 0;    // Baja la bandera de interrupción del TMR2
         T2CLKCON = 1;           // Fuente de reloj = Fosc/4
@@ -238,6 +241,30 @@ Como guía práctica, Microchip recomienda seguir los siguientes pasos para gene
         bra $-2
         bcf TRISC, 0, a         ; RC0 como salida
         ```
+
+### Pasos para configurar el modo PWM: Forma rápida
+
+Los pasos anteriormente expuestos son la forma **larga**, pero más **segura**, de configurar el modo PWM. Si no es importante evitar los "pulsos basura" durante la configuración, puedes ignorar el paso 6 y 5.1, y configurar el pin como salida desde el principio.
+
+??? example "Configuración rápida del modo PWM"
+    Para el Q10: Modificaré el ejemplo anterior para configurar el modo PWM de forma rápida. Las suposiciones del reloj y los cálculos para el periodo y duty cycle de la señal PWM siguen siendo los mismos, así que solo mostraré el código de configuración:
+
+    ```c
+    RC0PPS = 0x05;          // RC0 -> CCP1
+    TRISCbits.TRISC0 = 0;   // RC0 como salida
+    T2PR = 199;             // Periodo de la señal PWM = 200 us
+    CCP1CON = 0x9C;         // Modo PWM, justificado a la izquierda
+    CCPR1H = 0x32;
+    CCPR1L = 0;             // Duty cycle = 25%
+    T2CLKCON = 1;           // Fuente de reloj = Fosc/4
+    T2CON = 0x80;           // PreScaler 1:1, TMR2 habilitado
+    ```
+
+### Proyectos
+Te dejo algunos proyectos relacionados con el módulo CCP en modo PWM para que puedas adjuntarlo a tu IA de confianza y ver cómo se configura el módulo CCP en otros contextos.
+
+- 
+
 
 
 ## Referencias
