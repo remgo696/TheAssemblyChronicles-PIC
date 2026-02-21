@@ -47,6 +47,7 @@ $$\text{CCPRx value} = \frac{T_{ON} \times F_{osc}}{TMRx\text{ Prescaler}}$$
 
 | Registro | Función | Banco |
 |:---------|:--------|:------:|
+| `CCPTMRS`[^1] | Selección del timer asociado al CCPx | Access |
 | `RxyPPS`[^CCP_codes_Q10] | Asigna pin de salida al módulo CCPx | `0x0E` |
 | `TRISx` | Dirección del pin (entrada/salida) | Access |
 | `TxPR` | Cuenta máxima del timer → define periodo PWM | Access |
@@ -55,7 +56,6 @@ $$\text{CCPRx value} = \frac{T_{ON} \times F_{osc}}{TMRx\text{ Prescaler}}$$
 | `TxCLKCON` | Fuente de reloj del timer (`TxCLKCON=1` → $F_{osc}/4$) | Access |
 | `TxCON`[^TMRxCON] | Control del timer: habilitar (`ON`), prescaler (`CKPS`) | Access |
 | `PIR4`[^PIR4] | Banderas de interrupción TMR2/4/6 (`TMR2IF` bit 1) | `0x0E` |
-| `CCPTMRS`[^1] | Selección del timer asociado al CCPx | Access |
 
 ### CCPTMRS: Bits CxTSEL
 
@@ -81,7 +81,20 @@ $$\text{CCPRx value} = \frac{T_{ON} \times F_{osc}}{TMRx\text{ Prescaler}}$$
 - Modo PWM: `MODE = 11xx`
 - `FMT = 1`: justificado a la izquierda / `FMT = 0`: derecha
 
+### TxCON
 
+| Bit 7 | Bits 6:4 | Bits 3:0 |
+|:-----:|:--------:|:--------:|
+| ON | CKPS[2:0] | OUTPS[3:0] |
+
+- `ON = 1`: habilitar timer
+- `CKPS`: prescaler (000 = 1:1, 001 = 1:2, …, 111 = 1:128)
+
+### PIR4: Banderas TMR2/4/6
+
+| Bit 5 | Bit 3 | Bit 1 |
+|:-----:|:-----:|:-----:|
+| TMR6IF | TMR4IF | TMR2IF |
 
 ---
 
@@ -110,7 +123,7 @@ Evita "pulsos basura" configurando el pin como entrada hasta que el timer esté 
 3. Cargar el [periodo calculado](#periodo-pwm) en `TxPR`.
 4. Configurar [`CCPxCON`](#ccpxcon): modo PWM + formato (`EN`, `MODE`, `FMT`)[^CCPxCON].
 5. Cargar duty cycle [calculado](#duty-cycle-tiempo-en-alto) (10 bits) en `CCPRxH:L`.
-6. Bajar bandera `TMRxIF` en `PIR4`[^PIR4].
+6. Bajar bandera `TMRxIF` en [`PIR4`](#pir4-banderas-tmr246)[^PIR4].
 7. Seleccionar reloj del timer: `TxCLKCON = 1` ($\frac{F_{osc}}{4}$).
 8. Configurar prescaler y habilitar timer: `TxCON` (`ON = 1`)[^TMRxCON].
 9. Esperar a que `TMRxIF == 1`.
