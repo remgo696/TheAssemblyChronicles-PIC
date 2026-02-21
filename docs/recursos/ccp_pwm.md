@@ -33,7 +33,7 @@ $$TxPR = \frac{T_{PWM} \times F_{osc}}{4 \times TMRx\ Prescaler} - 1$$
 
 ### Duty Cycle (Tiempo en alto)
 
-$$CCPRx\text{ value} = \frac{T_{ON} \times F_{osc}}{TMRx\text{ Prescaler}}$$
+$$\text{CCPRx value} = \frac{T_{ON} \times F_{osc}}{TMRx\text{ Prescaler}}$$
 
 ??? info "Fórmula de verificación[^f_Ton]"
     $$T_{ON} = CCPRx\text{ value} \times \frac{TMRx\text{ Prescaler}}{F_{osc}}$$
@@ -52,12 +52,12 @@ $$CCPRx\text{ value} = \frac{T_{ON} \times F_{osc}}{TMRx\text{ Prescaler}}$$
 | `TxPR` | Cuenta máxima del timer → define periodo PWM | Access |
 | `CCPxCON`[^CCPxCON] | Control del CCP: habilitar (`EN`), modo (`MODE`), formato (`FMT`) | Access |
 | `CCPRxH:L` | Valor de 10 bits que define el duty cycle | Access |
-| `TxCLKCON` | Fuente de reloj del timer (`CS=1` → $F_{osc}/4$) | Access |
+| `TxCLKCON` | Fuente de reloj del timer (`TxCLKCON=1` → $F_{osc}/4$) | Access |
 | `TxCON`[^TMRxCON] | Control del timer: habilitar (`ON`), prescaler (`CKPS`) | Access |
 | `PIR4`[^PIR4] | Banderas de interrupción TMR2/4/6 (`TMR2IF` bit 1) | `0x0E` |
 | `CCPTMRS`[^1] | Selección del timer asociado al CCPx | `0x0E` |
 
-### PPS – Códigos de salida CCP
+### PPS: Códigos de salida CCP
 
 | RxyPPS | Módulo | Puertos destino |
 |:------:|:------:|:---------------:|
@@ -87,11 +87,11 @@ $$CCPRx\text{ value} = \frac{T_{ON} \times F_{osc}}{TMRx\text{ Prescaler}}$$
 
 No evita "pulsos basura" durante la configuración.
 
-1. Asignar pin al CCPx vía PPS (`RxyPPS`)[^CCP_codes_Q10].
-2. Configurar pin como **salida** (`TRISx = 0`).
-3. Cargar periodo en `TxPR`.
-4. Configurar `CCPxCON`: modo PWM + formato (`EN`, `MODE`, `FMT`)[^CCPxCON].
-5. Cargar duty cycle en `CCPRxH:L`.
+1. Asignar vía PPS un pin al CCP1 ([`RxyPPS=5`](#pps-codigos-de-salida-ccp)) o al CCP2 ([`RxyPPS=6`](#pps-codigos-de-salida-ccp)) [^CCP_codes_Q10].
+2. Configurar el pin como **salida** (`TRISxbits.TRISxy = 0`).
+3. Cargar el [periodo calculado](#periodo-pwm) en `TxPR`.
+4. Configurar [`CCPxCON`](#ccpxcon): modo PWM + formato (`EN`, `MODE`, `FMT`)[^CCPxCON].
+5. Cargar duty cycle [calculado](#duty-cycle-tiempo-en-alto) en [`CCPRxH:L`].
 6. Seleccionar reloj del timer: `TxCLKCON = 1` ($F_{osc}/4$).
 7. Configurar prescaler y habilitar timer: `TxCON` (`ON = 1`)[^TMRxCON].
 
