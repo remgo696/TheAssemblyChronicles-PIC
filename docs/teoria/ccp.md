@@ -81,6 +81,28 @@ $$CCPRx\text{ value} = \frac{T_{ON} \times F_{osc}}{TMRx\text{ PreScaler}}$$
 
 Como guía práctica, Microchip recomienda seguir los siguientes pasos para generar una señal PWM como salida en un pin[^setup_pwm]:
 
+0. Selecciona el timer a usar (TMR2/4/6) usando el registro [`CCPTMRS`](#periodo-de-la-senal-pwm).
+
+    ??? example "Ejemplo: Selección del timer asociado al CCPx"
+        Para el Q10: Si quieres usar el TMR2 en el `CCP1`:
+
+        ```c
+        CCPTMRSbits.C1TSEL = 1; // CCP1 -> TMR2
+        ```
+        ```asm
+        bsf CCPTMRS, 0, a       ; CCP1 -> TMR2. C1TSEL[1:0] = 01
+        ```
+
+        Para el Q43: Si quieres usar el TMR2 en el `CCP1`:
+
+        ```c
+        CCPTMRS0bits.C1TSEL = 1; // CCP1 -> TMR2
+        ```
+        ```asm
+        movlb 3h               ; Banco 3
+        bsf CCPTMRS0, 0, a     ; CCP1 -> TMR2. C1TSEL[1:0] = 01
+        ```
+
 1. Asigna el CCPn al puerto Rxy usando el registro RxyPPS. Los puertos destino dependen del µC. Tabla para el Q10:    
 
     <figcaption markdown="span">PPS output selection codes for CCP peripherals (Q10)[^CCP_codes_Q10]</figcaption>
@@ -177,7 +199,7 @@ Como guía práctica, Microchip recomienda seguir los siguientes pasos para gene
         En cambio, si el formato es justificado a la derecha (`FMT = 0`), el valor de `CCPRx` seguiría siendo el mismo, pero interpretado como $200 = 00\ 1100\ 1000_{(2)}$. O sea, `CCPRxH = 0` y `CCPRxL = 0xC8`.
 
 5. Terminar la configuración del TMRx.
-    - Baja la bandera TMRxIF en el registro PIR4. Por defecto está baja.
+    - Baja la bandera TMRxIF en el registro PIR4.
     - Selecciona $F_{osc}/4$ como fuente de reloj del TMRx asignando `TxCLKCON=1`.
 
     <figcaption markdown="span">Peripheral Interrupt Request Register 4 (PIR4): TMR2/4/6[^PIR4]</figcaption>
@@ -213,8 +235,11 @@ Como guía práctica, Microchip recomienda seguir los siguientes pasos para gene
         bsf T2CLKCON,0, a       ; Fuente de reloj = Fosc/4. T2CLKCON.CS = 1
         bsf T2CON, 7, a         ; PreScaler 1:1, TMR2 habilitado
         ```
+
 6.  Habilita la salida PWM:
+
     - Espera a que la bandera TMR2IF del registro PIR4 se active.
+
     - Activa la salida del pin CCPx limpiando el bit TRIS asociado.
 
     ??? example "Ejemplo: Habilitar la salida PWM"
@@ -250,6 +275,7 @@ Los pasos anteriormente expuestos son la forma **larga**, pero más **segura**, 
     Para el Q10: Modificaré el ejemplo anterior para configurar el modo PWM de forma rápida. Las suposiciones del reloj y los cálculos para el periodo y duty cycle de la señal PWM siguen siendo los mismos, así que solo mostraré el código de configuración:
 
     ```c
+    CCPTMRSbits.C1TSEL = 1; // CCP1 -> TMR2
     RC0PPS = 0x05;          // RC0 -> CCP1
     TRISCbits.TRISC0 = 0;   // RC0 como salida
     T2PR = 199;             // Periodo de la señal PWM = 200 us
