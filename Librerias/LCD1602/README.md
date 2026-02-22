@@ -45,10 +45,9 @@ La librería utiliza **PORTD** por defecto:
 | RD6 | D6 (Dato) | Pin 13 |
 | RD7 | D7 (Dato) | Pin 14 |
 
-!!! warning "Importante"
-    - **Verifica que los pines RD0, RD1, RD2, RD4, RD5, RD6 y RD7 estén disponibles** en tu diseño.
-    - RD3 **NO se usa**, por lo que puede usarse para otras funciones.
-    - Si necesitas usar otros pines, modifica los `#define` en `LCD.h`.
+> [!WARNING]
+> **Verifica que los pines RD0-2 y RD4-7 estén disponibles** en tu diseño.
+> Si necesitas usar otros pines, modifica los `#define` en `LCD.h`.
 
 ### 4. Configurar el reloj
 
