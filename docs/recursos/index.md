@@ -15,6 +15,25 @@ A continuación, encontrarás resúmenes de los módulos más importantes, con s
 
 ---
 
+## Librerías del curso
+
+Las librerías usadas en el curso fueron originalmente desarrolladas por el **Prof. Sergio Salas** y posteriormente modificadas por **Kalun Jose Lau Gan**. Puedes encontrar las librerías originales en el [repositorio de Kalun](https://github.com/tocache/Microchip-PIC18F57Q43/tree/main/Libs).
+
+!!! note "Librerías modificadas"
+    Algunas librerías han sido modificadas para mejorar su documentación y corregir inconvenientes. Te recomiendo usar las versiones incluidas en este repositorio.
+
+### Librerías disponibles
+
+| Librería | Descripción | Repositorio |
+|:---------|:------------|:------------|
+| **LCD1602** | Control de pantalla LCD 16x2 (versión modificada) | [:fontawesome-brands-github: Ver documentación](https://github.com/remgo696/TheAssemblyChronicles-PIC/tree/main/Librerias/LCD1602) |
+| **Otras librerías** | Modulos adicionales del curso | [:fontawesome-brands-github: Repositorio de Kalun](https://github.com/tocache/Microchip-PIC18F57Q43/tree/main/Libs) |
+
+!!! tip "Recomendación"
+    Por ahora, solo la librería LCD ha sido modificada y mejorada. Para las demás librerías, puedes usar las versiones del repositorio de Kalun.
+
+---
+
 
 ## Documentos oficiales
 
