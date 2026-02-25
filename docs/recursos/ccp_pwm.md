@@ -19,6 +19,8 @@ tags:
 
 # CCP – Guía Rápida (Modo PWM)
 
+Para más detalles sobre el módulo CCP, su configuración y funcionamiento, consultar la [guía completa](../teoria/ccp.md).
+
 ## Cálculos Previos
 
 ### Periodo PWM
