@@ -12,6 +12,7 @@ A continuación, encontrarás resúmenes de los módulos más importantes, con s
 | Módulo | Descripción |
 |:--|:--|
 | [CCP](ccp_pwm.md) | Módulo de captura, comparación y PWM |
+| [TMR0](tmr0.md) | Temporizador Timer 0 en modo 8 y 16 bits |
 
 ---
 
