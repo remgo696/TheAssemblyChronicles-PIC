@@ -68,6 +68,7 @@ nav:
   - Recursos:
     - recursos/index.md
     - CCP-PWM: recursos/ccp_pwm.md
+    - TMR0: recursos/tmr0.md
 
 # ── Markdown Extensions ──────────────────────
 markdown_extensions:
