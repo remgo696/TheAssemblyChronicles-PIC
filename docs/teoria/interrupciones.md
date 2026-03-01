@@ -1,54 +1,19 @@
 ---
 title: Interrupciones
-description: Vectores de interrupción, priorización y diseño de ISR en el PIC18F57Q43
+description: Vectores de interrupción, priorización y diseño de ISR en el PIC18F47Q10
 ---
 
 # Interrupciones
 
-!!! note "En construcción"
+## ¿Qué es una interrupción?
 
-    Este artículo está en desarrollo. El contenido se irá ampliando progresivamente.
+Las **interrupciones** suspenden temporalmente la ejecución del μC del programa principal para atender un evento (externo o interno). Una vez atendido, se retoma la ejecución normal mediante la instrucción `RETFIE`. Así, el evento disparador de la rutina se llama **fuente de interrupción**, el código que se ejecuta para atenderla es la **rutina de servicio de interrupción** (ISR) y la dirección de memoria donde se encuentra la ISR es el **vector de interrupción**.
 
----
+## Vectores de interrupción
+El Q10 tiene 2 vectores de interrupción[^vectors]: `0x0008` para interrupciones de alta prioridad y `0x0018` para las de baja prioridad. Es más, al desactivar las prioridades, todas las interrupciones van al vector de alta prioridad `0x0008`.
 
-## Conceptos clave
+??? info "Vectores de interrupción en el Q43"
+    El Q43 utiliza un **controlador de interrupciones vectorizado** (VIC) con una tabla de vectores configurable a través de `IVTBASE`, en lugar de los dos vectores fijos del Q10.
 
-Las **interrupciones** permiten al microcontrolador suspender temporalmente la ejecución del programa principal para atender un evento externo o interno. Una vez atendido, se retoma la ejecución normal mediante la instrucción `RETFIE`.
-
----
-
-## Temas a desarrollar
-
-- [ ] Vector de interrupción y `RETFIE`
-- [ ] Fuentes de interrupción: **INT**, **IOC** y temporizadores
-- [ ] Priorización de interrupciones (alta / baja)
-- [ ] Banderas y habilitación global (`GIE`, `PEIE`)
-- [ ] Diseño de rutinas **ISR** eficientes
-- [ ] Ejemplo: control de LED o contador con botón
-
----
-
-## Diagrama de flujo de una interrupción
-
-```mermaid
-flowchart TD
-    A[Programa principal] --> B{¿Interrupción?}
-    B -- No --> A
-    B -- Sí --> C[Guardar contexto]
-    C --> D[Ejecutar ISR]
-    D --> E[Limpiar bandera]
-    E --> F[Restaurar contexto]
-    F --> G[RETFIE]
-    G --> A
-```
-
----
-
-## Registros principales
-
-| Registro | Descripción |
-|:---------|:------------|
-| `INTCON` | Control global de interrupciones (`GIE`, `PEIE`) |
-| `PIRn` | Banderas (*flags*) de interrupción de periféricos |
-| `PIEn` | Habilitación individual de interrupciones |
-| `IPRn` | Prioridad de cada fuente de interrupción |
+## Referencias
+[^vectors]: {{ q10('15.2', 192) }}
