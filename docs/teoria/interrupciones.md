@@ -49,6 +49,49 @@ El registro `INTCON` es el registro principal de control de interrupciones del Q
 
 ---
 
+## Fuentes de interrupción
+
+Cada fuente de interrupción del Q10 se gestiona mediante tres bits distribuidos en los registros `PIRx`, `PIEx` e `IPRx`[^PIR] [^PIE] [^IPR]:
+
+- **`PIRx`** — Peripheral Interrupt Request (bandera): se activa por hardware cuando ocurre el evento. Se debe limpiar por software en la ISR.
+- **`PIEx`** — Peripheral Interrupt Enable (habilitación): habilita la interrupción individual de cada fuente.
+- **`IPRx`** — Interrupt Priority Register (prioridad): `1` = alta prioridad · `0` = baja prioridad. Solo tiene efecto si `IPEN = 1`.
+
+Los tres registros siguen la misma estructura: el mismo número de registro (`x`) y el mismo bit controlan la misma fuente de interrupción. Por ejemplo, `TMR0IF` (bandera), `TMR0IE` (habilitación) y `TMR0IP` (prioridad) están todos en el bit 5 de `PIR0`, `PIE0` e `IPR0` respectivamente.
+
+### Mapa de registros de interrupción
+
+La siguiente tabla resume todas las fuentes de interrupción periféricas del Q10 y los bits asociados en los registros `PIRx`/`PIEx`/`IPRx`. Todos estos registros están en el banco `0Eh`[^regsummary].
+
+<figcaption markdown="span">Resumen de registros de interrupción [^regsummary]</figcaption>
+
+| #Reg | Bit 7 | Bit 6 | Bit 5 | Bit 4 | Bit 3 | Bit 2 | Bit 1 | Bit 0 |
+|:---------:|:--------:|:-----:|:-----:|:-----:|:-----:|:-----:|:-----:|:-----:|
+| `0` | — | — | TMR0 | IOC | — | INT2 | INT1 | INT0 |
+| `1` | OSCF | CSW | — | — | — | — | ADT | AD |
+| `2` | HLVD | ZCD | — | — | — | — | C2 | C1 |
+| `3` | RC2 | TX2 | RC1 | TX1 | BCL2 | SSP2 | BCL1 | SSP1 |
+| `4` | — | — | TMR6 | TMR5 | TMR4 | TMR3 | TMR2 | TMR1 |
+| `5` | CLC4 | CLC3 | CLC2 | CLC1 | — | TMR5G | TMR3G | TMR1G |
+| `6` | CLC8 | CLC7 | CLC6 | CLC5 | — | — | CCP2 | CCP1 |
+| `7` | SCAN | CRC | — | NVM | — | — | — | CWG1 |
+
+
+??? tip "¿Cómo leer esta tabla?"
+    Para encontrar los bits asociados a una fuente de interrupción, busca el sufijo del periférico. Por ejemplo, para el TMR0:
+
+    - **Bandera:** `TMR0IF` → `PIR0`, bit 5 (dirección `0x0EC5`).
+    - **Habilitación:** `TMR0IE` → `PIE0`, bit 5 (dirección `0x0EBD`).
+    - **Prioridad:** `TMR0IP` → `IPR0`, bit 5 (dirección `0x0EB5`).
+
+    Los tres registros siempre comparten el mismo número (`PIR0`/`PIE0`/`IPR0`) y el mismo bit (5) para la misma fuente.
+
+---
+
 ## Referencias
 [^vectors]: {{ q10('15.2', 192) }}
 [^INTCON]: {{ q10('15.13.1', 195) }}
+[^PIR]: {{ q10('15.5', 195) }}
+[^PIE]: {{ q10('15.6', 195) }}
+[^IPR]: {{ q10('15.7', 195) }}
+[^regsummary]: {{ q10('15.12', 197) }}
