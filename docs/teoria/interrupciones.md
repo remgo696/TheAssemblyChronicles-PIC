@@ -88,9 +88,77 @@ La siguiente tabla resume todas las fuentes de interrupción periféricas del Q1
 
 ---
 
+### Pasos para configurar interrupciones con prioridad
+Normalmente, se usan las interrupciones con prioridad en el Q10:
+
+0. Configurar el periférico que generará la interrupción (TMR0, CCP, EUSART, etc.).
+
+1. Habilitar las interrupciones con prioridad en `INTCON`.
+
+    ??? example "Ejemplo: Habilitar interrupciones globales"
+        Con prioridades habilitadas (`IPEN = 1`), para habilitar alta y baja prioridad:
+
+        ```c
+        INTCONbits.IPEN = 1;    // Habilitar prioridades
+        INTCONbits.GIEH = 1;    // Habilitar interrupciones de alta prioridad
+        INTCONbits.GIEL = 1;    // Habilitar interrupciones de baja prioridad
+        ```
+        ```asm
+        setf INTCON, a        ; IPEN = 1, GIE/GIEH = 1, PEIE/GIEL = 1
+        ```
+
+        Sin prioridades (`IPEN = 0`):
+
+        ```c
+        INTCONbits.GIE = 1;     // Habilitar interrupciones globales
+        INTCONbits.PEIE = 1;    // Habilitar interrupciones periféricas
+        ```
+        ```asm
+        bsf INTCON, 7, a        ; GIE = 1
+        bsf INTCON, 6, a        ; PEIE = 1
+        ```
+
+1. Bajar la bandera de interrupción correspondiente en `PIRx`.
+
+    ??? example "Ejemplo: Bajar bandera del TMR0"
+        ```c
+        PIR0bits.TMR0IF = 0;
+        ```
+        ```asm
+        movlb 0Eh
+        bcf PIR0, 5, b          ; TMR0IF = 0
+        ```
+
+2. Habilitar la interrupción individual en `PIEx`.
+
+    ??? example "Ejemplo: Habilitar interrupción del TMR0"
+        ```c
+        PIE0bits.TMR0IE = 1;
+        ```
+        ```asm
+        bsf PIE0, 5, b          ; TMR0IE = 1
+        ```
+
+3. Configurar la prioridad en `IPRx`.
+
+    ??? example "Ejemplo: Alta prioridad para TMR0"
+        ```c
+        IPR0bits.TMR0IP = 1;    // Alta prioridad
+        ```
+        ```asm
+        bsf IPR0, 5, b          ; TMR0IP = 1 (alta prioridad)
+        ```
+
+
+5. En la ISR, limpiar la bandera `PIRx` correspondiente antes de salir con `RETFIE`.
+
+    !!! warning "Limpiar la bandera en la ISR"
+        Si no se limpia la bandera de interrupción (`PIRx`) dentro de la ISR, la interrupción se disparará continuamente al salir de la rutina con `RETFIE`.
+
 ## Referencias
 [^vectors]: {{ q10('15.2', 192) }}
 [^INTCON]: {{ q10('15.13.1', 195) }}
+[^priority]: {{ q10('15.2', 192) }}
 [^PIR]: {{ q10('15.5', 195) }}
 [^PIE]: {{ q10('15.6', 195) }}
 [^IPR]: {{ q10('15.7', 195) }}
