@@ -1,0 +1,1657 @@
+
+<!doctype html>
+<html lang="es" class="no-js">
+  <head>
+    
+      <meta charset="utf-8">
+      <meta name="viewport" content="width=device-width,initial-scale=1">
+      
+        <meta name="description" content="Configuración y uso del módulo CCP del PIC18F47Q10 en modo PWM">
+      
+      
+        <meta name="author" content="David Díaz">
+      
+      
+        <link rel="canonical" href="https://remgo696.github.io/TheAssemblyChronicles-PIC/teoria/ccp/">
+      
+      
+        <link rel="prev" href="../interrupciones/">
+      
+      
+        <link rel="next" href="../../proyectos/">
+      
+      
+        
+      
+      
+      <link rel="icon" href="../../assets/images/microchip.ico">
+      <meta name="generator" content="mkdocs-1.6.1, mkdocs-material-9.7.3">
+    
+    
+      
+        <title>CCP - The Assembly Chronicles – PIC</title>
+      
+    
+    
+      <link rel="stylesheet" href="../../assets/stylesheets/main.484c7ddc.min.css">
+      
+        
+        <link rel="stylesheet" href="../../assets/stylesheets/palette.ab4e12ef.min.css">
+      
+      
+
+
+    
+    
+      
+    
+    
+      
+        
+        
+        <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
+        <link rel="stylesheet" href="https://fonts.googleapis.com/css?family=Inter:300,300i,400,400i,700,700i%7CJetBrains+Mono:400,400i,700,700i&display=fallback">
+        <style>:root{--md-text-font:"Inter";--md-code-font:"JetBrains Mono"}</style>
+      
+    
+    
+      <link rel="stylesheet" href="../../assets/css/custom.css">
+    
+    <script>__md_scope=new URL("../..",location),__md_hash=e=>[...e].reduce(((e,_)=>(e<<5)-e+_.charCodeAt(0)),0),__md_get=(e,_=localStorage,t=__md_scope)=>JSON.parse(_.getItem(t.pathname+"."+e)),__md_set=(e,_,t=localStorage,a=__md_scope)=>{try{t.setItem(a.pathname+"."+e,JSON.stringify(_))}catch(e){}}</script>
+    
+      
+
+    
+    
+  </head>
+  
+  
+    
+    
+      
+    
+    
+    
+    
+    <body dir="ltr" data-md-color-scheme="default" data-md-color-primary="indigo" data-md-color-accent="teal">
+  
+    
+    <input class="md-toggle" data-md-toggle="drawer" type="checkbox" id="__drawer" autocomplete="off">
+    <input class="md-toggle" data-md-toggle="search" type="checkbox" id="__search" autocomplete="off">
+    <label class="md-overlay" for="__drawer"></label>
+    <div data-md-component="skip">
+      
+        
+        <a href="#capturacomparacionpwm-ccp" class="md-skip">
+          Saltar a contenido
+        </a>
+      
+    </div>
+    <div data-md-component="announce">
+      
+    </div>
+    
+    
+      
+
+  
+
+<header class="md-header md-header--shadow md-header--lifted" data-md-component="header">
+  <nav class="md-header__inner md-grid" aria-label="Cabecera">
+    <a href="../.." title="The Assembly Chronicles – PIC" class="md-header__button md-logo" aria-label="The Assembly Chronicles – PIC" data-md-component="logo">
+      
+  
+  <svg xmlns="http://www.w3.org/2000/svg" viewBox="0 0 24 24"><path d="M17 17H7V7h10m4 4V9h-2V7a2 2 0 0 0-2-2h-2V3h-2v2h-2V3H9v2H7c-1.11 0-2 .89-2 2v2H3v2h2v2H3v2h2v2a2 2 0 0 0 2 2h2v2h2v-2h2v2h2v-2h2a2 2 0 0 0 2-2v-2h2v-2h-2v-2m-6 2h-2v-2h2m2-2H9v6h6z"/></svg>
+
+    </a>
+    <label class="md-header__button md-icon" for="__drawer">
+      
+      <svg xmlns="http://www.w3.org/2000/svg" viewBox="0 0 24 24"><path d="M3 6h18v2H3zm0 5h18v2H3zm0 5h18v2H3z"/></svg>
+    </label>
+    <div class="md-header__title" data-md-component="header-title">
+      <div class="md-header__ellipsis">
+        <div class="md-header__topic">
+          <span class="md-ellipsis">
+            The Assembly Chronicles – PIC
+          </span>
+        </div>
+        <div class="md-header__topic" data-md-component="header-topic">
+          <span class="md-ellipsis">
+            
+              CCP
+            
+          </span>
+        </div>
+      </div>
+    </div>
+    
+      
+        <form class="md-header__option" data-md-component="palette">
+  
+    
+    
+    
+    <input class="md-option" data-md-color-media="(prefers-color-scheme: light)" data-md-color-scheme="default" data-md-color-primary="indigo" data-md-color-accent="teal"  aria-label="Cambiar a modo oscuro"  type="radio" name="__palette" id="__palette_0">
+    
+      <label class="md-header__button md-icon" title="Cambiar a modo oscuro" for="__palette_1" hidden>
+        <svg xmlns="http://www.w3.org/2000/svg" viewBox="0 0 24 24"><path d="M12 8a4 4 0 0 0-4 4 4 4 0 0 0 4 4 4 4 0 0 0 4-4 4 4 0 0 0-4-4m0 10a6 6 0 0 1-6-6 6 6 0 0 1 6-6 6 6 0 0 1 6 6 6 6 0 0 1-6 6m8-9.31V4h-4.69L12 .69 8.69 4H4v4.69L.69 12 4 15.31V20h4.69L12 23.31 15.31 20H20v-4.69L23.31 12z"/></svg>
+      </label>
+    
+  
+    
+    
+    
+    <input class="md-option" data-md-color-media="(prefers-color-scheme: dark)" data-md-color-scheme="slate" data-md-color-primary="indigo" data-md-color-accent="teal"  aria-label="Cambiar a modo claro"  type="radio" name="__palette" id="__palette_1">
+    
+      <label class="md-header__button md-icon" title="Cambiar a modo claro" for="__palette_0" hidden>
+        <svg xmlns="http://www.w3.org/2000/svg" viewBox="0 0 24 24"><path d="M12 18c-.89 0-1.74-.2-2.5-.55C11.56 16.5 13 14.42 13 12s-1.44-4.5-3.5-5.45C10.26 6.2 11.11 6 12 6a6 6 0 0 1 6 6 6 6 0 0 1-6 6m8-9.31V4h-4.69L12 .69 8.69 4H4v4.69L.69 12 4 15.31V20h4.69L12 23.31 15.31 20H20v-4.69L23.31 12z"/></svg>
+      </label>
+    
+  
+</form>
+      
+    
+    
+      <script>var palette=__md_get("__palette");if(palette&&palette.color){if("(prefers-color-scheme)"===palette.color.media){var media=matchMedia("(prefers-color-scheme: light)"),input=document.querySelector(media.matches?"[data-md-color-media='(prefers-color-scheme: light)']":"[data-md-color-media='(prefers-color-scheme: dark)']");palette.color.media=input.getAttribute("data-md-color-media"),palette.color.scheme=input.getAttribute("data-md-color-scheme"),palette.color.primary=input.getAttribute("data-md-color-primary"),palette.color.accent=input.getAttribute("data-md-color-accent")}for(var[key,value]of Object.entries(palette.color))document.body.setAttribute("data-md-color-"+key,value)}</script>
+    
+    
+    
+      
+      
+        <label class="md-header__button md-icon" for="__search">
+          
+          <svg xmlns="http://www.w3.org/2000/svg" viewBox="0 0 24 24"><path d="M9.5 3A6.5 6.5 0 0 1 16 9.5c0 1.61-.59 3.09-1.56 4.23l.27.27h.79l5 5-1.5 1.5-5-5v-.79l-.27-.27A6.52 6.52 0 0 1 9.5 16 6.5 6.5 0 0 1 3 9.5 6.5 6.5 0 0 1 9.5 3m0 2C7 5 5 7 5 9.5S7 14 9.5 14 14 12 14 9.5 12 5 9.5 5"/></svg>
+        </label>
+        <div class="md-search" data-md-component="search" role="dialog">
+  <label class="md-search__overlay" for="__search"></label>
+  <div class="md-search__inner" role="search">
+    <form class="md-search__form" name="search">
+      <input type="text" class="md-search__input" name="query" aria-label="Búsqueda" placeholder="Búsqueda" autocapitalize="off" autocorrect="off" autocomplete="off" spellcheck="false" data-md-component="search-query" required>
+      <label class="md-search__icon md-icon" for="__search">
+        
+        <svg xmlns="http://www.w3.org/2000/svg" viewBox="0 0 24 24"><path d="M9.5 3A6.5 6.5 0 0 1 16 9.5c0 1.61-.59 3.09-1.56 4.23l.27.27h.79l5 5-1.5 1.5-5-5v-.79l-.27-.27A6.52 6.52 0 0 1 9.5 16 6.5 6.5 0 0 1 3 9.5 6.5 6.5 0 0 1 9.5 3m0 2C7 5 5 7 5 9.5S7 14 9.5 14 14 12 14 9.5 12 5 9.5 5"/></svg>
+        
+        <svg xmlns="http://www.w3.org/2000/svg" viewBox="0 0 24 24"><path d="M20 11v2H8l5.5 5.5-1.42 1.42L4.16 12l7.92-7.92L13.5 5.5 8 11z"/></svg>
+      </label>
+      <nav class="md-search__options" aria-label="Buscar">
+        
+        <button type="reset" class="md-search__icon md-icon" title="Limpiar" aria-label="Limpiar" tabindex="-1">
+          
+          <svg xmlns="http://www.w3.org/2000/svg" viewBox="0 0 24 24"><path d="M19 6.41 17.59 5 12 10.59 6.41 5 5 6.41 10.59 12 5 17.59 6.41 19 12 13.41 17.59 19 19 17.59 13.41 12z"/></svg>
+        </button>
+      </nav>
+      
+        <div class="md-search__suggest" data-md-component="search-suggest"></div>
+      
+    </form>
+    <div class="md-search__output">
+      <div class="md-search__scrollwrap" tabindex="0" data-md-scrollfix>
+        <div class="md-search-result" data-md-component="search-result">
+          <div class="md-search-result__meta">
+            Inicializando búsqueda
+          </div>
+          <ol class="md-search-result__list" role="presentation"></ol>
+        </div>
+      </div>
+    </div>
+  </div>
+</div>
+      
+    
+    
+      <div class="md-header__source">
+        <a href="https://github.com/remgo696/TheAssemblyChronicles-PIC" title="Ir al repositorio" class="md-source" data-md-component="source">
+  <div class="md-source__icon md-icon">
+    
+    <svg xmlns="http://www.w3.org/2000/svg" viewBox="0 0 512 512"><!--! Font Awesome Free 7.1.0 by @fontawesome - https://fontawesome.com License - https://fontawesome.com/license/free (Icons: CC BY 4.0, Fonts: SIL OFL 1.1, Code: MIT License) Copyright 2025 Fonticons, Inc.--><path d="M173.9 397.4c0 2-2.3 3.6-5.2 3.6-3.3.3-5.6-1.3-5.6-3.6 0-2 2.3-3.6 5.2-3.6 3-.3 5.6 1.3 5.6 3.6m-31.1-4.5c-.7 2 1.3 4.3 4.3 4.9 2.6 1 5.6 0 6.2-2s-1.3-4.3-4.3-5.2c-2.6-.7-5.5.3-6.2 2.3m44.2-1.7c-2.9.7-4.9 2.6-4.6 4.9.3 2 2.9 3.3 5.9 2.6 2.9-.7 4.9-2.6 4.6-4.6-.3-1.9-3-3.2-5.9-2.9M252.8 8C114.1 8 8 113.3 8 252c0 110.9 69.8 205.8 169.5 239.2 12.8 2.3 17.3-5.6 17.3-12.1 0-6.2-.3-40.4-.3-61.4 0 0-70 15-84.7-29.8 0 0-11.4-29.1-27.8-36.6 0 0-22.9-15.7 1.6-15.4 0 0 24.9 2 38.6 25.8 21.9 38.6 58.6 27.5 72.9 20.9 2.3-16 8.8-27.1 16-33.7-55.9-6.2-112.3-14.3-112.3-110.5 0-27.5 7.6-41.3 23.6-58.9-2.6-6.5-11.1-33.3 2.6-67.9 20.9-6.5 69 27 69 27 20-5.6 41.5-8.5 62.8-8.5s42.8 2.9 62.8 8.5c0 0 48.1-33.6 69-27 13.7 34.7 5.2 61.4 2.6 67.9 16 17.7 25.8 31.5 25.8 58.9 0 96.5-58.9 104.2-114.8 110.5 9.2 7.9 17 22.9 17 46.4 0 33.7-.3 75.4-.3 83.6 0 6.5 4.6 14.4 17.3 12.1C436.2 457.8 504 362.9 504 252 504 113.3 391.5 8 252.8 8M105.2 352.9c-1.3 1-1 3.3.7 5.2 1.6 1.6 3.9 2.3 5.2 1 1.3-1 1-3.3-.7-5.2-1.6-1.6-3.9-2.3-5.2-1m-10.8-8.1c-.7 1.3.3 2.9 2.3 3.9 1.6 1 3.6.7 4.3-.7.7-1.3-.3-2.9-2.3-3.9-2-.6-3.6-.3-4.3.7m32.4 35.6c-1.6 1.3-1 4.3 1.3 6.2 2.3 2.3 5.2 2.6 6.5 1 1.3-1.3.7-4.3-1.3-6.2-2.2-2.3-5.2-2.6-6.5-1m-11.4-14.7c-1.6 1-1.6 3.6 0 5.9s4.3 3.3 5.6 2.3c1.6-1.3 1.6-3.9 0-6.2-1.4-2.3-4-3.3-5.6-2"/></svg>
+  </div>
+  <div class="md-source__repository">
+    remgo696/TheAssemblyChronicles-PIC
+  </div>
+</a>
+      </div>
+    
+  </nav>
+  
+    
+      
+<nav class="md-tabs" aria-label="Pestañas" data-md-component="tabs">
+  <div class="md-grid">
+    <ul class="md-tabs__list">
+      
+        
+  
+  
+  
+  
+    <li class="md-tabs__item">
+      <a href="../.." class="md-tabs__link">
+        
+  
+  
+    
+  
+  Inicio
+
+      </a>
+    </li>
+  
+
+      
+        
+  
+  
+  
+    
+  
+  
+    
+    
+      <li class="md-tabs__item md-tabs__item--active">
+        <a href="../" class="md-tabs__link">
+          
+  
+  
+  Teoría
+
+        </a>
+      </li>
+    
+  
+
+      
+        
+  
+  
+  
+  
+    
+    
+      <li class="md-tabs__item">
+        <a href="../../proyectos/" class="md-tabs__link">
+          
+  
+  
+  Proyectos
+
+        </a>
+      </li>
+    
+  
+
+      
+        
+  
+  
+  
+  
+    
+    
+      <li class="md-tabs__item">
+        <a href="../../recursos/" class="md-tabs__link">
+          
+  
+  
+  Recursos
+
+        </a>
+      </li>
+    
+  
+
+      
+    </ul>
+  </div>
+</nav>
+    
+  
+</header>
+    
+    <div class="md-container" data-md-component="container">
+      
+      
+        
+      
+      <main class="md-main" data-md-component="main">
+        <div class="md-main__inner md-grid">
+          
+            
+              
+              <div class="md-sidebar md-sidebar--primary" data-md-component="sidebar" data-md-type="navigation" >
+                <div class="md-sidebar__scrollwrap">
+                  <div class="md-sidebar__inner">
+                    
+
+
+  
+
+
+<nav class="md-nav md-nav--primary md-nav--lifted" aria-label="Navegación" data-md-level="0">
+  <label class="md-nav__title" for="__drawer">
+    <a href="../.." title="The Assembly Chronicles – PIC" class="md-nav__button md-logo" aria-label="The Assembly Chronicles – PIC" data-md-component="logo">
+      
+  
+  <svg xmlns="http://www.w3.org/2000/svg" viewBox="0 0 24 24"><path d="M17 17H7V7h10m4 4V9h-2V7a2 2 0 0 0-2-2h-2V3h-2v2h-2V3H9v2H7c-1.11 0-2 .89-2 2v2H3v2h2v2H3v2h2v2a2 2 0 0 0 2 2h2v2h2v-2h2v2h2v-2h2a2 2 0 0 0 2-2v-2h2v-2h-2v-2m-6 2h-2v-2h2m2-2H9v6h6z"/></svg>
+
+    </a>
+    The Assembly Chronicles – PIC
+  </label>
+  
+    <div class="md-nav__source">
+      <a href="https://github.com/remgo696/TheAssemblyChronicles-PIC" title="Ir al repositorio" class="md-source" data-md-component="source">
+  <div class="md-source__icon md-icon">
+    
+    <svg xmlns="http://www.w3.org/2000/svg" viewBox="0 0 512 512"><!--! Font Awesome Free 7.1.0 by @fontawesome - https://fontawesome.com License - https://fontawesome.com/license/free (Icons: CC BY 4.0, Fonts: SIL OFL 1.1, Code: MIT License) Copyright 2025 Fonticons, Inc.--><path d="M173.9 397.4c0 2-2.3 3.6-5.2 3.6-3.3.3-5.6-1.3-5.6-3.6 0-2 2.3-3.6 5.2-3.6 3-.3 5.6 1.3 5.6 3.6m-31.1-4.5c-.7 2 1.3 4.3 4.3 4.9 2.6 1 5.6 0 6.2-2s-1.3-4.3-4.3-5.2c-2.6-.7-5.5.3-6.2 2.3m44.2-1.7c-2.9.7-4.9 2.6-4.6 4.9.3 2 2.9 3.3 5.9 2.6 2.9-.7 4.9-2.6 4.6-4.6-.3-1.9-3-3.2-5.9-2.9M252.8 8C114.1 8 8 113.3 8 252c0 110.9 69.8 205.8 169.5 239.2 12.8 2.3 17.3-5.6 17.3-12.1 0-6.2-.3-40.4-.3-61.4 0 0-70 15-84.7-29.8 0 0-11.4-29.1-27.8-36.6 0 0-22.9-15.7 1.6-15.4 0 0 24.9 2 38.6 25.8 21.9 38.6 58.6 27.5 72.9 20.9 2.3-16 8.8-27.1 16-33.7-55.9-6.2-112.3-14.3-112.3-110.5 0-27.5 7.6-41.3 23.6-58.9-2.6-6.5-11.1-33.3 2.6-67.9 20.9-6.5 69 27 69 27 20-5.6 41.5-8.5 62.8-8.5s42.8 2.9 62.8 8.5c0 0 48.1-33.6 69-27 13.7 34.7 5.2 61.4 2.6 67.9 16 17.7 25.8 31.5 25.8 58.9 0 96.5-58.9 104.2-114.8 110.5 9.2 7.9 17 22.9 17 46.4 0 33.7-.3 75.4-.3 83.6 0 6.5 4.6 14.4 17.3 12.1C436.2 457.8 504 362.9 504 252 504 113.3 391.5 8 252.8 8M105.2 352.9c-1.3 1-1 3.3.7 5.2 1.6 1.6 3.9 2.3 5.2 1 1.3-1 1-3.3-.7-5.2-1.6-1.6-3.9-2.3-5.2-1m-10.8-8.1c-.7 1.3.3 2.9 2.3 3.9 1.6 1 3.6.7 4.3-.7.7-1.3-.3-2.9-2.3-3.9-2-.6-3.6-.3-4.3.7m32.4 35.6c-1.6 1.3-1 4.3 1.3 6.2 2.3 2.3 5.2 2.6 6.5 1 1.3-1.3.7-4.3-1.3-6.2-2.2-2.3-5.2-2.6-6.5-1m-11.4-14.7c-1.6 1-1.6 3.6 0 5.9s4.3 3.3 5.6 2.3c1.6-1.3 1.6-3.9 0-6.2-1.4-2.3-4-3.3-5.6-2"/></svg>
+  </div>
+  <div class="md-source__repository">
+    remgo696/TheAssemblyChronicles-PIC
+  </div>
+</a>
+    </div>
+  
+  <ul class="md-nav__list" data-md-scrollfix>
+    
+      
+      
+  
+  
+  
+  
+    <li class="md-nav__item">
+      <a href="../.." class="md-nav__link">
+        
+  
+  
+  <span class="md-ellipsis">
+    
+  
+    Inicio
+  
+
+    
+  </span>
+  
+  
+
+      </a>
+    </li>
+  
+
+    
+      
+      
+  
+  
+    
+  
+  
+  
+    
+    
+    
+    
+      
+        
+        
+      
+      
+        
+      
+    
+    
+    <li class="md-nav__item md-nav__item--active md-nav__item--section md-nav__item--nested">
+      
+        
+        
+        <input class="md-nav__toggle md-toggle " type="checkbox" id="__nav_2" checked>
+        
+          
+          <label class="md-nav__link" for="__nav_2" id="__nav_2_label" tabindex="">
+            
+  
+  
+  <span class="md-ellipsis">
+    
+  
+    Teoría
+  
+
+    
+  </span>
+  
+  
+
+            <span class="md-nav__icon md-icon"></span>
+          </label>
+        
+        <nav class="md-nav" data-md-level="1" aria-labelledby="__nav_2_label" aria-expanded="true">
+          <label class="md-nav__title" for="__nav_2">
+            <span class="md-nav__icon md-icon"></span>
+            
+  
+    Teoría
+  
+
+          </label>
+          <ul class="md-nav__list" data-md-scrollfix>
+            
+              
+                
+  
+  
+  
+  
+    <li class="md-nav__item">
+      <a href="../" class="md-nav__link">
+        
+  
+  
+  <span class="md-ellipsis">
+    
+  
+    Teoría
+  
+
+    
+  </span>
+  
+  
+
+      </a>
+    </li>
+  
+
+              
+            
+              
+                
+  
+  
+  
+  
+    <li class="md-nav__item">
+      <a href="../introduccion/" class="md-nav__link">
+        
+  
+  
+  <span class="md-ellipsis">
+    
+  
+    Introducción
+  
+
+    
+  </span>
+  
+  
+
+      </a>
+    </li>
+  
+
+              
+            
+              
+                
+  
+  
+  
+  
+    <li class="md-nav__item">
+      <a href="../arquitectura/" class="md-nav__link">
+        
+  
+  
+  <span class="md-ellipsis">
+    
+  
+    Arquitectura
+  
+
+    
+  </span>
+  
+  
+
+      </a>
+    </li>
+  
+
+              
+            
+              
+                
+  
+  
+  
+  
+    <li class="md-nav__item">
+      <a href="../temporizadores/" class="md-nav__link">
+        
+  
+  
+  <span class="md-ellipsis">
+    
+  
+    Temporizadores
+  
+
+    
+  </span>
+  
+  
+
+      </a>
+    </li>
+  
+
+              
+            
+              
+                
+  
+  
+  
+  
+    <li class="md-nav__item">
+      <a href="../interrupciones/" class="md-nav__link">
+        
+  
+  
+  <span class="md-ellipsis">
+    
+  
+    Interrupciones
+  
+
+    
+  </span>
+  
+  
+
+      </a>
+    </li>
+  
+
+              
+            
+              
+                
+  
+  
+    
+  
+  
+  
+    <li class="md-nav__item md-nav__item--active">
+      
+      <input class="md-nav__toggle md-toggle" type="checkbox" id="__toc">
+      
+      
+        
+      
+      
+        <label class="md-nav__link md-nav__link--active" for="__toc">
+          
+  
+  
+  <span class="md-ellipsis">
+    
+  
+    CCP
+  
+
+    
+  </span>
+  
+  
+
+          <span class="md-nav__icon md-icon"></span>
+        </label>
+      
+      <a href="./" class="md-nav__link md-nav__link--active">
+        
+  
+  
+  <span class="md-ellipsis">
+    
+  
+    CCP
+  
+
+    
+  </span>
+  
+  
+
+      </a>
+      
+        
+
+<nav class="md-nav md-nav--secondary" aria-label="Tabla de contenidos">
+  
+  
+  
+    
+  
+  
+    <label class="md-nav__title" for="__toc">
+      <span class="md-nav__icon md-icon"></span>
+      Tabla de contenidos
+    </label>
+    <ul class="md-nav__list" data-md-component="toc" data-md-scrollfix>
+      
+        <li class="md-nav__item">
+  <a href="#modo-pwm" class="md-nav__link">
+    <span class="md-ellipsis">
+      
+        Modo PWM
+      
+    </span>
+  </a>
+  
+    <nav class="md-nav" aria-label="Modo PWM">
+      <ul class="md-nav__list">
+        
+          <li class="md-nav__item">
+  <a href="#periodo-de-la-senal-pwm" class="md-nav__link">
+    <span class="md-ellipsis">
+      
+        Periodo de la señal PWM
+      
+    </span>
+  </a>
+  
+</li>
+        
+          <li class="md-nav__item">
+  <a href="#duty-cycle-de-la-senal-pwm" class="md-nav__link">
+    <span class="md-ellipsis">
+      
+        Duty cycle de la señal PWM
+      
+    </span>
+  </a>
+  
+</li>
+        
+          <li class="md-nav__item">
+  <a href="#pasos-para-configurar-el-modo-pwm-forma-segura" class="md-nav__link">
+    <span class="md-ellipsis">
+      
+        Pasos para configurar el modo PWM: Forma segura
+      
+    </span>
+  </a>
+  
+</li>
+        
+          <li class="md-nav__item">
+  <a href="#pasos-para-configurar-el-modo-pwm-forma-rapida" class="md-nav__link">
+    <span class="md-ellipsis">
+      
+        Pasos para configurar el modo PWM: Forma rápida
+      
+    </span>
+  </a>
+  
+</li>
+        
+          <li class="md-nav__item">
+  <a href="#proyectos" class="md-nav__link">
+    <span class="md-ellipsis">
+      
+        Proyectos
+      
+    </span>
+  </a>
+  
+</li>
+        
+      </ul>
+    </nav>
+  
+</li>
+      
+        <li class="md-nav__item">
+  <a href="#referencias" class="md-nav__link">
+    <span class="md-ellipsis">
+      
+        Referencias
+      
+    </span>
+  </a>
+  
+</li>
+      
+    </ul>
+  
+</nav>
+      
+    </li>
+  
+
+              
+            
+          </ul>
+        </nav>
+      
+    </li>
+  
+
+    
+      
+      
+  
+  
+  
+  
+    
+    
+    
+    
+      
+      
+        
+      
+    
+    
+    <li class="md-nav__item md-nav__item--nested">
+      
+        
+        
+        <input class="md-nav__toggle md-toggle " type="checkbox" id="__nav_3" >
+        
+          
+          <label class="md-nav__link" for="__nav_3" id="__nav_3_label" tabindex="0">
+            
+  
+  
+  <span class="md-ellipsis">
+    
+  
+    Proyectos
+  
+
+    
+  </span>
+  
+  
+
+            <span class="md-nav__icon md-icon"></span>
+          </label>
+        
+        <nav class="md-nav" data-md-level="1" aria-labelledby="__nav_3_label" aria-expanded="false">
+          <label class="md-nav__title" for="__nav_3">
+            <span class="md-nav__icon md-icon"></span>
+            
+  
+    Proyectos
+  
+
+          </label>
+          <ul class="md-nav__list" data-md-scrollfix>
+            
+              
+                
+  
+  
+  
+  
+    <li class="md-nav__item">
+      <a href="../../proyectos/" class="md-nav__link">
+        
+  
+  
+  <span class="md-ellipsis">
+    
+  
+    Proyectos
+  
+
+    
+  </span>
+  
+  
+
+      </a>
+    </li>
+  
+
+              
+            
+          </ul>
+        </nav>
+      
+    </li>
+  
+
+    
+      
+      
+  
+  
+  
+  
+    
+    
+    
+    
+      
+      
+        
+      
+    
+    
+    <li class="md-nav__item md-nav__item--nested">
+      
+        
+        
+        <input class="md-nav__toggle md-toggle " type="checkbox" id="__nav_4" >
+        
+          
+          <label class="md-nav__link" for="__nav_4" id="__nav_4_label" tabindex="0">
+            
+  
+  
+  <span class="md-ellipsis">
+    
+  
+    Recursos
+  
+
+    
+  </span>
+  
+  
+
+            <span class="md-nav__icon md-icon"></span>
+          </label>
+        
+        <nav class="md-nav" data-md-level="1" aria-labelledby="__nav_4_label" aria-expanded="false">
+          <label class="md-nav__title" for="__nav_4">
+            <span class="md-nav__icon md-icon"></span>
+            
+  
+    Recursos
+  
+
+          </label>
+          <ul class="md-nav__list" data-md-scrollfix>
+            
+              
+                
+  
+  
+  
+  
+    <li class="md-nav__item">
+      <a href="../../recursos/" class="md-nav__link">
+        
+  
+  
+  <span class="md-ellipsis">
+    
+  
+    Recursos
+  
+
+    
+  </span>
+  
+  
+
+      </a>
+    </li>
+  
+
+              
+            
+              
+                
+  
+  
+  
+  
+    <li class="md-nav__item">
+      <a href="../../recursos/ccp_pwm/" class="md-nav__link">
+        
+  
+  
+  <span class="md-ellipsis">
+    
+  
+    CCP-PWM
+  
+
+    
+  </span>
+  
+  
+
+      </a>
+    </li>
+  
+
+              
+            
+              
+                
+  
+  
+  
+  
+    <li class="md-nav__item">
+      <a href="../../recursos/tmr0/" class="md-nav__link">
+        
+  
+  
+  <span class="md-ellipsis">
+    
+  
+    TMR0
+  
+
+    
+  </span>
+  
+  
+
+      </a>
+    </li>
+  
+
+              
+            
+          </ul>
+        </nav>
+      
+    </li>
+  
+
+    
+  </ul>
+</nav>
+                  </div>
+                </div>
+              </div>
+            
+            
+              
+              <div class="md-sidebar md-sidebar--secondary" data-md-component="sidebar" data-md-type="toc" >
+                <div class="md-sidebar__scrollwrap">
+                  <div class="md-sidebar__inner">
+                    
+
+<nav class="md-nav md-nav--secondary" aria-label="Tabla de contenidos">
+  
+  
+  
+    
+  
+  
+    <label class="md-nav__title" for="__toc">
+      <span class="md-nav__icon md-icon"></span>
+      Tabla de contenidos
+    </label>
+    <ul class="md-nav__list" data-md-component="toc" data-md-scrollfix>
+      
+        <li class="md-nav__item">
+  <a href="#modo-pwm" class="md-nav__link">
+    <span class="md-ellipsis">
+      
+        Modo PWM
+      
+    </span>
+  </a>
+  
+    <nav class="md-nav" aria-label="Modo PWM">
+      <ul class="md-nav__list">
+        
+          <li class="md-nav__item">
+  <a href="#periodo-de-la-senal-pwm" class="md-nav__link">
+    <span class="md-ellipsis">
+      
+        Periodo de la señal PWM
+      
+    </span>
+  </a>
+  
+</li>
+        
+          <li class="md-nav__item">
+  <a href="#duty-cycle-de-la-senal-pwm" class="md-nav__link">
+    <span class="md-ellipsis">
+      
+        Duty cycle de la señal PWM
+      
+    </span>
+  </a>
+  
+</li>
+        
+          <li class="md-nav__item">
+  <a href="#pasos-para-configurar-el-modo-pwm-forma-segura" class="md-nav__link">
+    <span class="md-ellipsis">
+      
+        Pasos para configurar el modo PWM: Forma segura
+      
+    </span>
+  </a>
+  
+</li>
+        
+          <li class="md-nav__item">
+  <a href="#pasos-para-configurar-el-modo-pwm-forma-rapida" class="md-nav__link">
+    <span class="md-ellipsis">
+      
+        Pasos para configurar el modo PWM: Forma rápida
+      
+    </span>
+  </a>
+  
+</li>
+        
+          <li class="md-nav__item">
+  <a href="#proyectos" class="md-nav__link">
+    <span class="md-ellipsis">
+      
+        Proyectos
+      
+    </span>
+  </a>
+  
+</li>
+        
+      </ul>
+    </nav>
+  
+</li>
+      
+        <li class="md-nav__item">
+  <a href="#referencias" class="md-nav__link">
+    <span class="md-ellipsis">
+      
+        Referencias
+      
+    </span>
+  </a>
+  
+</li>
+      
+    </ul>
+  
+</nav>
+                  </div>
+                </div>
+              </div>
+            
+          
+          
+            <div class="md-content" data-md-component="content">
+              
+              <article class="md-content__inner md-typeset">
+                
+                  
+
+
+  
+  
+
+
+<h1 id="capturacomparacionpwm-ccp">Captura/Comparación/PWM (CCP)<a class="headerlink" href="#capturacomparacionpwm-ccp" title="Permanent link">&para;</a></h1>
+<p>El módulo CCP (Capture/Compare/PWM) es un periférico versátil que se encuentra en los µC PIC18F, incluyendo el Q10 (CCP1/2) y Q43 (CCP1/2/3). 
+El nombre se debe a los tres modos en los que opera. Por ahora, nos enfocaremos en el modo PWM (pulse width modulation). </p>
+<h2 id="modo-pwm">Modo PWM<a class="headerlink" href="#modo-pwm" title="Permanent link">&para;</a></h2>
+<p><img align="left" alt="Señal PWM" src="https://emariete.com/wp-content/uploads/2023/12/Diagrama-Senal-PWM.png" width="280" />
+Antes de nada, recordemos los dos elementos de una señal (cuadrada) PWM. Primero, el periodo es el tiempo que transcurre entre dos flancos ascendentes/descendentes consecutivos de la señal. Segundo, el tiempo de servicio (duty cycle) es el porcentaje de tiempo que la señal está en alto respecto a un período. Eso es todo.</p>
+<div style="clear: both;"></div>
+
+<figure style="text-align: center;">
+    <img align="center" alt="Diagrama de bloques del módulo CCP" src="../../assets/images/ccp_block_diagram.png" width="80%" />
+
+<figcaption>Diagrama de bloques del módulo CCP del PIC18F47Q10 <sup id="fnref:3"><a class="footnote-ref" href="#fn:3">1</a></sup></figcaption>
+</figure>
+<p><em>Puedes saltearte la explicación del cómo funciona internamente el módulo CCP si quieres y continuar leyendo sobre los <a href="#periodo-de-la-senal-pwm">elementos de la señal PWM</a></em>. Empecemos viendo el bloque del modulo TMR2 (timer asociado por defecto al CPPx). Primero, podemos ver que TMR2 (de 8 bits) cuenta hasta que alcanza el valor de <code>PRx</code> (referencia al registro <code>TxPR</code>). Cuando esto sucede (han pasado <code>PRx</code><span class="arithmatex">\(+1\)</span> cuentas), TMR2 se reinicia a cero, manda una señal al <em>10-bit Latch</em> y activa el flip-flop SR. Así, el <em>10-bit Latch</em> se actualiza con el valor que representa el registro <code>CCPRx</code> y la señal PWM se mantiene en alto. Luego, cuando TMR2 concatenado a 2 bits generados por <span class="arithmatex">\(F_OSC\)</span> (o el prescaler) es igual al valor del <em>10-bit Latch</em> (han pasado <code>CCPRx</code> cuentas), se da <em>reset</em> al flip-flop SR, lo que hace que la señal PWM se ponga en bajo. Finalmente, el ciclo se repite, generando una señal PWM con un periodo definido por <code>PRx</code> y un <em>duty cycle</em> definido por <code>CCPRx</code>.</p>
+<h3 id="periodo-de-la-senal-pwm">Periodo de la señal PWM<a class="headerlink" href="#periodo-de-la-senal-pwm" title="Permanent link">&para;</a></h3>
+<p>El periodo de la señal PWM está definido por la cuenta máxima del temporizador TMR2/4/6 de 10 bits asociado al módulo CCPx. </p>
+<p>En el Q10, el timer se asocia al módulo CCPx mediante los bits <code>CxTSEL</code> del registro <code>CCPTMRS</code>. En el Q43, mediante los bits <code>CxTSEL</code> del registro <code>CCPTMRS0</code>.</p>
+<figcaption>CCPx Timer Selection bits <sup id="fnref:1"><a class="footnote-ref" href="#fn:1">2</a></sup> <sup id="fnref:2"><a class="footnote-ref" href="#fn:2">3</a></sup></figcaption>
+<table>
+<thead>
+<tr>
+<th style="text-align: center;">CxTSEL[1:0]</th>
+<th style="text-align: center;">Timer Asociado</th>
+</tr>
+</thead>
+<tbody>
+<tr>
+<td style="text-align: center;">01</td>
+<td style="text-align: center;">TMR2</td>
+</tr>
+<tr>
+<td style="text-align: center;">10</td>
+<td style="text-align: center;">TMR4</td>
+</tr>
+<tr>
+<td style="text-align: center;">11</td>
+<td style="text-align: center;">TMR6</td>
+</tr>
+</tbody>
+</table>
+<details class="info">
+<summary><code>CCPTMRS</code> vs. <code>CCPTMRS0</code></summary>
+<p>El Q10 comparte el registo <code>CCPTMRS</code> entre los módulos CCP1/2 y PWM3/4. En cambio, el Q43 usa el registro <code>CCPTMRS0</code> solo para los módulos CCP1/2/3. Esto se debe a que:
+- El Q43 tiene más módulos CCP
+- El Q43 tiene más módulos PWM, cada uno con su propio registro de selección de timer.
+Así, un solo registro no es suficiente para configurar todos los módulos CCP y PWM del Q43, mientras que sí lo es para el Q10.</p>
+</details>
+<p>Los timers TMR2/4/6 son de 8 bits, lo que significa que cuentan desde 0 hasta 255. 
+Para configurar la cuenta máxima, se carga el byte más significativo del valor máximo deseado en el registro <code>TxPR</code> del módulo TMRx. 
+Por ejemplo, si se carga el valor <span class="arithmatex">\(200\)</span>, el timer contará desde <span class="arithmatex">\(0\)</span> hasta <span class="arithmatex">\(200\)</span> antes de reiniciarse, lo que define el periodo de la señal PWM. 
+En ese tiempo, se realizan <span class="arithmatex">\(200+1=201\)</span> cuentas. 
+De esta forma, el periodo de la señal PWM se puede calcular con la siguiente fórmula:</p>
+<div class="arithmatex">\[T_{PWM} = (TxPR + 1) \times T_{CLK\ INPUT} \times Prescaler\]</div>
+<details class="danger">
+<summary>¿Y el PostScaler?</summary>
+<p>El PostScaler del TMRx no afecta el periodo de la señal PWM, ya que solo influye en la generación de interrupciones, no en el conteo del timer.</p>
+</details>
+<p>Pero, el modo PWM solo funciona correctamente cuando se usa <span class="arithmatex">\(\frac{F_{osc}}{4}\)</span> como fuente de reloj para el timer. Por esto, la fórmula del periodo de la señal PWM se convierte en<sup id="fnref:f_Tpwm"><a class="footnote-ref" href="#fn:f_Tpwm">4</a></sup>:</p>
+<div class="arithmatex">\[T_{PWM} = \frac{4 \times (TxPR+1) \times TMRx\ Prescaler}{F_{osc}}\]</div>
+<p>Sin embargo, normalmente, la variable a hallar es <code>TxPR</code>, no el periodo de la señal PWM:</p>
+<div class="arithmatex">\[TxPR = \frac{T_{PWM} \times F_{osc}}{4 \times TMRx\ Prescaler} - 1\]</div>
+<h3 id="duty-cycle-de-la-senal-pwm">Duty cycle de la señal PWM<a class="headerlink" href="#duty-cycle-de-la-senal-pwm" title="Permanent link">&para;</a></h3>
+<p><img align="left" alt="Registro CCPRx" src="../../assets/images/ccp_register_pwm.png" width="280" />
+El tiempo en que la señal PWM está activa se define por el valor que representa el registro <code>CCPRx</code>, conformado por <code>CCPRxH</code> y <code>CCPRxL</code>. 
+Además, el bit <code>FMT</code> del registro <code>CCPxCON</code> define si el <em>10-bit Duty Cycle</em> toma los 10 bits más significativos (<code>FMT = 1</code>) o los 10 bits menos significativos (<code>FMT = 0</code>) del registro <code>CCPRxH:L</code>.</p>
+<div style="clear: both;"></div>
+
+<p>Por lo tanto, la duración en activo de la señal PWM es:</p>
+<div class="arithmatex">\[T_{ON} = CCPRx\text{ value}\times \frac{T_{\text{CLK INPUT}}\times TMRx\text{ PreScaler}}{4}\]</div>
+<p>En concordancia con lo explicado sobre el bit <code>FMT</code>, <code>CCPRx value = CCPRxH[1:0]:CCPRxL</code> para <code>FMT = 0</code> y <code>CCPRx value = CCPRxH:CCPRxL[7:6]</code> para <code>FMT = 1</code>. 
+Además, para el caso de que se use <span class="arithmatex">\(\frac{F_{osc}}{4}\)</span> como fuente de reloj para el timer, la duración en activo de la señal PWM será<sup id="fnref:f_Ton"><a class="footnote-ref" href="#fn:f_Ton">5</a></sup>:</p>
+<div class="arithmatex">\[T_{ON} = CCPRx\text{ value}\times \frac{TMRx\text{ PreScaler}}{F_{osc}}\]</div>
+<p>Pero, normalmente, sabes el tiempo en activo que quieres generar. Así que, puedes despejar el valor de <code>CCPRx</code>:</p>
+<div class="arithmatex">\[CCPRx\text{ value} = \frac{T_{ON} \times F_{osc}}{TMRx\text{ PreScaler}}\]</div>
+<h3 id="pasos-para-configurar-el-modo-pwm-forma-segura">Pasos para configurar el modo PWM: Forma segura<a class="headerlink" href="#pasos-para-configurar-el-modo-pwm-forma-segura" title="Permanent link">&para;</a></h3>
+<p>Como guía práctica, Microchip recomienda seguir los siguientes pasos para generar una señal PWM como salida en un pin<sup id="fnref:setup_pwm"><a class="footnote-ref" href="#fn:setup_pwm">6</a></sup>:</p>
+<ol>
+<li>
+<p>Selecciona el timer a usar (TMR2/4/6) usando el registro <a href="#periodo-de-la-senal-pwm"><code>CCPTMRS</code></a>.</p>
+<details class="example">
+<summary>Ejemplo: Selección del timer asociado al CCPx</summary>
+<p>Para el Q10: Si quieres usar el TMR2 en el <code>CCP1</code>:</p>
+<p><div class="language-c highlight"><pre><span></span><code><span id="__span-0-1"><a id="__codelineno-0-1" name="__codelineno-0-1" href="#__codelineno-0-1"></a><span class="n">CCPTMRSbits</span><span class="p">.</span><span class="n">C1TSEL</span><span class="w"> </span><span class="o">=</span><span class="w"> </span><span class="mi">1</span><span class="p">;</span><span class="w"> </span><span class="c1">// CCP1 -&gt; TMR2</span>
+</span></code></pre></div>
+<div class="language-asm highlight"><pre><span></span><code><span id="__span-1-1"><a id="__codelineno-1-1" name="__codelineno-1-1" href="#__codelineno-1-1"></a><span class="nf">bsf</span><span class="w"> </span><span class="no">CCPTMRS</span><span class="p">,</span><span class="w"> </span><span class="mi">0</span><span class="p">,</span><span class="w"> </span><span class="no">a</span><span class="w">       </span><span class="c1">; CCP1 -&gt; TMR2. C1TSEL[1:0] = 01</span>
+</span></code></pre></div></p>
+<p>Para el Q43: Si quieres usar el TMR2 en el <code>CCP1</code>:</p>
+<p><div class="language-c highlight"><pre><span></span><code><span id="__span-2-1"><a id="__codelineno-2-1" name="__codelineno-2-1" href="#__codelineno-2-1"></a><span class="n">CCPTMRS0bits</span><span class="p">.</span><span class="n">C1TSEL</span><span class="w"> </span><span class="o">=</span><span class="w"> </span><span class="mi">1</span><span class="p">;</span><span class="w"> </span><span class="c1">// CCP1 -&gt; TMR2</span>
+</span></code></pre></div>
+<div class="language-asm highlight"><pre><span></span><code><span id="__span-3-1"><a id="__codelineno-3-1" name="__codelineno-3-1" href="#__codelineno-3-1"></a><span class="nf">movlb</span><span class="w"> </span><span class="mi">3</span><span class="no">h</span><span class="w">               </span><span class="c1">; Banco 3</span>
+</span><span id="__span-3-2"><a id="__codelineno-3-2" name="__codelineno-3-2" href="#__codelineno-3-2"></a><span class="nf">bsf</span><span class="w"> </span><span class="no">CCPTMRS0</span><span class="p">,</span><span class="w"> </span><span class="mi">0</span><span class="p">,</span><span class="w"> </span><span class="no">a</span><span class="w">     </span><span class="c1">; CCP1 -&gt; TMR2. C1TSEL[1:0] = 01</span>
+</span></code></pre></div></p>
+</details>
+</li>
+<li>
+<p>Asigna el CCPn al puerto Rxy usando el registro RxyPPS. Los puertos destino dependen del µC. Tabla para el Q10:    </p>
+<p><figcaption markdown="span">PPS output selection codes for CCP peripherals (Q10)<sup id="fnref:CCP_codes_Q10"><a class="footnote-ref" href="#fn:CCP_codes_Q10">7</a></sup></figcaption></p>
+<table>
+<thead>
+<tr>
+<th style="text-align: center;">RxyPPS</th>
+<th style="text-align: center;">Fuente de salida del pin Rxy</th>
+<th style="text-align: center;">Puerto al que se puede dirigir la salida</th>
+</tr>
+</thead>
+<tbody>
+<tr>
+<td style="text-align: center;">0x05</td>
+<td style="text-align: center;">CCP1</td>
+<td style="text-align: center;">RB RC</td>
+</tr>
+<tr>
+<td style="text-align: center;">0x06</td>
+<td style="text-align: center;">CCP2</td>
+<td style="text-align: center;">RB RC</td>
+</tr>
+</tbody>
+</table>
+<details class="info">
+<summary>PPS en el Q43</summary>
+<p><figcaption markdown="span">PPS output selection codes for CCP peripherals (Q43)<sup id="fnref:CCP_codes_Q43"><a class="footnote-ref" href="#fn:CCP_codes_Q43">8</a></sup></figcaption></p>
+<table>
+<thead>
+<tr>
+<th style="text-align: center;">RxyPPS</th>
+<th style="text-align: center;">Fuente de salida del pin Rxy</th>
+<th style="text-align: center;">Puerto al que se puede dirigir la salida</th>
+</tr>
+</thead>
+<tbody>
+<tr>
+<td style="text-align: center;">0x15</td>
+<td style="text-align: center;">CCP1</td>
+<td style="text-align: center;">RC RF</td>
+</tr>
+<tr>
+<td style="text-align: center;">0x16</td>
+<td style="text-align: center;">CCP2</td>
+<td style="text-align: center;">RF RF</td>
+</tr>
+<tr>
+<td style="text-align: center;">0x17</td>
+<td style="text-align: center;">CCP3</td>
+<td style="text-align: center;">RB RD</td>
+</tr>
+</tbody>
+</table>
+</details>
+<p>Y, como medida de seguridad (pueden generarse "pulsos basura" mientras se configura el módulo), activa el pin como entrada (TRIS = 1).</p>
+<details class="example">
+<summary>Ejemplo: Configuración del PPS</summary>
+<p>Para el Q10: Si quieres usar el CCP1, veo en la tabla qué puertos puedo usar (RB o RC)<sup id="fnref2:CCP_codes_Q10"><a class="footnote-ref" href="#fn:CCP_codes_Q10">7</a></sup>. Usaré el pin RC0: </p>
+<p><div class="language-c highlight"><pre><span></span><code><span id="__span-4-1"><a id="__codelineno-4-1" name="__codelineno-4-1" href="#__codelineno-4-1"></a><span class="n">RC0PPS</span><span class="w"> </span><span class="o">=</span><span class="w"> </span><span class="mh">0x05</span><span class="p">;</span><span class="w">          </span><span class="c1">// RC0 -&gt; CCP1</span>
+</span><span id="__span-4-2"><a id="__codelineno-4-2" name="__codelineno-4-2" href="#__codelineno-4-2"></a><span class="n">TRISCbits</span><span class="p">.</span><span class="n">TRISC0</span><span class="w"> </span><span class="o">=</span><span class="w"> </span><span class="mi">1</span><span class="p">;</span><span class="w">   </span><span class="c1">// RC0 como entrada</span>
+</span></code></pre></div>
+Todos los registros RBxPPS y RCxPPS del Q10 están en el banco 14.
+<div class="language-asm highlight"><pre><span></span><code><span id="__span-5-1"><a id="__codelineno-5-1" name="__codelineno-5-1" href="#__codelineno-5-1"></a><span class="nf">movlb</span><span class="w"> </span><span class="mi">0</span><span class="no">Eh</span><span class="w">               </span><span class="c1">; Banco 14</span>
+</span><span id="__span-5-2"><a id="__codelineno-5-2" name="__codelineno-5-2" href="#__codelineno-5-2"></a><span class="nf">movlw</span><span class="w"> </span><span class="mi">0x05</span>
+</span><span id="__span-5-3"><a id="__codelineno-5-3" name="__codelineno-5-3" href="#__codelineno-5-3"></a><span class="nf">movwf</span><span class="w"> </span><span class="no">RC0PPS</span><span class="p">,</span><span class="w"> </span><span class="no">b</span><span class="w">         </span><span class="c1">; RC0 -&gt; CCP1</span>
+</span><span id="__span-5-4"><a id="__codelineno-5-4" name="__codelineno-5-4" href="#__codelineno-5-4"></a><span class="nf">bsf</span><span class="w"> </span><span class="no">TRISC</span><span class="p">,</span><span class="w"> </span><span class="mi">0</span><span class="p">,</span><span class="w"> </span><span class="no">a</span><span class="w">         </span><span class="c1">; RC0 como entrada</span>
+</span></code></pre></div></p>
+</details>
+</li>
+<li>
+<p>Carga el registro <code>TxPR</code> con el valor que define el periodo de la señal PWM.</p>
+<details class="example">
+<summary>Ejemplo: Configuración del periodo PWM</summary>
+<p>Para el Q10: Si quieres generar una señal PWM de 5 kHz (<span class="arithmatex">\(T_{PWM} = 200\ \mu s\)</span>) usando el TMR2 (prescaler de 1:1, <span class="arithmatex">\(\text{clk input} = \frac{F_{osc}}{4}\)</span>) y con <span class="arithmatex">\(F_{osc} = 4\ MHz\)</span>, puedes usar la fórmula para calcular el valor de <code>TxPR</code>:</p>
+<div class="arithmatex">\[TxPR = \frac{T_{PWM} \times F_{osc}}{4 \times TMRx\text{ Prescaler}} - 1 = \frac{200\ \mu s \times 4\ MHz}{4 \times 1} - 1 = 199\]</div>
+<p><div class="language-c highlight"><pre><span></span><code><span id="__span-6-1"><a id="__codelineno-6-1" name="__codelineno-6-1" href="#__codelineno-6-1"></a><span class="n">T2PR</span><span class="w"> </span><span class="o">=</span><span class="w"> </span><span class="mi">199</span><span class="p">;</span><span class="w">             </span><span class="c1">// Periodo de la señal PWM = 200 us</span>
+</span></code></pre></div>
+<div class="language-asm highlight"><pre><span></span><code><span id="__span-7-1"><a id="__codelineno-7-1" name="__codelineno-7-1" href="#__codelineno-7-1"></a><span class="nf">movlw</span><span class="w"> </span><span class="mi">199</span>
+</span><span id="__span-7-2"><a id="__codelineno-7-2" name="__codelineno-7-2" href="#__codelineno-7-2"></a><span class="nf">movwf</span><span class="w"> </span><span class="no">T2PR</span><span class="p">,</span><span class="w"> </span><span class="no">a</span><span class="w">           </span><span class="c1">; Periodo de la señal PWM = 200 us</span>
+</span></code></pre></div></p>
+</details>
+<div class="admonition tip">
+<p class="admonition-title">TxPR está asociado al timer TMR2/4/6, no al módulo CCPx</p>
+</div>
+</li>
+<li>
+<p>Configura el registro <code>CCPxCON</code> en modo PWM (<code>MODE=11xx</code>) y la justificación que desees (<code>FMT = 1</code> si es izquierda) para <code>CCPRx</code>.</p>
+<p><figcaption markdown="span">CCP Control Register (CCPxCON)<sup id="fnref:CCPxCON"><a class="footnote-ref" href="#fn:CCPxCON">9</a></sup></figcaption></p>
+<table>
+<thead>
+<tr>
+<th style="text-align: center;">Bit</th>
+<th style="text-align: center;">7</th>
+<th style="text-align: center;">6</th>
+<th style="text-align: center;">5</th>
+<th style="text-align: center;">4</th>
+<th style="text-align: center;">3:0</th>
+</tr>
+</thead>
+<tbody>
+<tr>
+<td style="text-align: center;"><strong>Campo</strong></td>
+<td style="text-align: center;">EN</td>
+<td style="text-align: center;">—</td>
+<td style="text-align: center;">OUT</td>
+<td style="text-align: center;">FMT</td>
+<td style="text-align: center;">MODE[3:0]</td>
+</tr>
+<tr>
+<td style="text-align: center;"><strong>Permisos</strong></td>
+<td style="text-align: center;">R/W</td>
+<td style="text-align: center;">—</td>
+<td style="text-align: center;">RO</td>
+<td style="text-align: center;">R/W</td>
+<td style="text-align: center;">R/W</td>
+</tr>
+<tr>
+<td style="text-align: center;"><strong>Reset</strong></td>
+<td style="text-align: center;">0</td>
+<td style="text-align: center;">—</td>
+<td style="text-align: center;">x</td>
+<td style="text-align: center;">0</td>
+<td style="text-align: center;">0000</td>
+</tr>
+</tbody>
+</table>
+<details class="example">
+<summary>Configurar <code>CCPxCON.MODE</code></summary>
+<p>Para el Q10: Al configurar el modo PWM, aprovecha en configurar el formato justificado a la izquierda (<code>FMT = 1</code>) si así lo deseas:</p>
+<p><div class="language-c highlight"><pre><span></span><code><span id="__span-8-1"><a id="__codelineno-8-1" name="__codelineno-8-1" href="#__codelineno-8-1"></a><span class="n">CCP1CON</span><span class="w"> </span><span class="o">=</span><span class="w"> </span><span class="mh">0x9C</span><span class="p">;</span><span class="w">         </span><span class="c1">// Modo PWM, justificado a la izquierda</span>
+</span></code></pre></div>
+<div class="language-asm highlight"><pre><span></span><code><span id="__span-9-1"><a id="__codelineno-9-1" name="__codelineno-9-1" href="#__codelineno-9-1"></a><span class="nf">movlw</span><span class="w"> </span><span class="mi">0x9C</span><span class="w">              </span><span class="c1">; 1001 1100</span>
+</span><span id="__span-9-2"><a id="__codelineno-9-2" name="__codelineno-9-2" href="#__codelineno-9-2"></a><span class="nf">movwf</span><span class="w"> </span><span class="no">CCP1CON</span><span class="p">,</span><span class="w"> </span><span class="no">a</span><span class="w">        </span><span class="c1">; Modo PWM, justificado a la izquierda</span>
+</span></code></pre></div>
+Obviamente, si deseas el formato justificado a la derecha, solo reemplaza el valor <code>0x9C</code> por <code>0x8C</code> (0000 1100).</p>
+</details>
+</li>
+<li>
+<p>Configura el registro <code>CCPRxH</code> y <code>CCPRxL</code> con el valor que define el duty cycle de la señal PWM.</p>
+<details class="example">
+<summary>Ejemplo: Configurar <code>CCPRx</code></summary>
+<p>Para el Q10: Con las condiciones que se mencionaron en los anteriores ejemplos, si deseas un duty cycle del 25% (50 us), puedes usar la fórmula para calcular el valor de <code>CCPRx</code>:</p>
+<div class="arithmatex">\[CCPRx\text{ value} = \frac{T_{ON} \times F_{osc}}{TMRx\text{ prescaler}} = \frac{50\ \mu s \times 4\ MHz}{1} = 200 = 0011\ 0010\ 00_{(2)}\]</div>
+<p>He separado el valor de <code>CCPRx</code> en 10 bits para mostrar cómo se asignan los bits a <code>CCPRxH</code> y <code>CCPRxL</code> con el formato justificado a la izquierda (<code>FMT = 1</code>):</p>
+<p><div class="language-c highlight"><pre><span></span><code><span id="__span-10-1"><a id="__codelineno-10-1" name="__codelineno-10-1" href="#__codelineno-10-1"></a><span class="n">CCPR1H</span><span class="w"> </span><span class="o">=</span><span class="w"> </span><span class="mh">0x32</span><span class="p">;</span>
+</span><span id="__span-10-2"><a id="__codelineno-10-2" name="__codelineno-10-2" href="#__codelineno-10-2"></a><span class="n">CCPR1L</span><span class="w"> </span><span class="o">=</span><span class="w"> </span><span class="mi">0</span><span class="p">;</span><span class="w">             </span><span class="c1">// Duty cycle = 25%</span>
+</span></code></pre></div>
+<div class="language-asm highlight"><pre><span></span><code><span id="__span-11-1"><a id="__codelineno-11-1" name="__codelineno-11-1" href="#__codelineno-11-1"></a><span class="c1">; Duty cycle = 25% (justificado a la izquierda)</span>
+</span><span id="__span-11-2"><a id="__codelineno-11-2" name="__codelineno-11-2" href="#__codelineno-11-2"></a><span class="nf">movlw</span><span class="w"> </span><span class="mi">0x32</span><span class="w">              </span>
+</span><span id="__span-11-3"><a id="__codelineno-11-3" name="__codelineno-11-3" href="#__codelineno-11-3"></a><span class="no">movwf</span><span class="w"> </span><span class="no">CCPR1H</span><span class="p">,</span><span class="w"> </span><span class="no">a</span>
+</span><span id="__span-11-4"><a id="__codelineno-11-4" name="__codelineno-11-4" href="#__codelineno-11-4"></a><span class="nf">clrf</span><span class="w"> </span><span class="no">CCPR1L</span><span class="p">,</span><span class="w"> </span><span class="no">a</span><span class="w">          </span><span class="c1">; CCPR1 = 200 = 0011 0010 00</span>
+</span></code></pre></div>
+En cambio, si el formato es justificado a la derecha (<code>FMT = 0</code>), el valor de <code>CCPRx</code> seguiría siendo el mismo, pero interpretado como <span class="arithmatex">\(200 = 00\ 1100\ 1000_{(2)}\)</span>. O sea, <code>CCPRxH = 0</code> y <code>CCPRxL = 0xC8</code>.</p>
+</details>
+</li>
+<li>
+<p>Terminar la configuración del TMRx.</p>
+<ul>
+<li>Baja la bandera TMRxIF en el registro PIR4.</li>
+<li>Selecciona <span class="arithmatex">\(F_{osc}/4\)</span> como fuente de reloj del TMRx asignando <code>TxCLKCON=1</code>.</li>
+</ul>
+<p><figcaption markdown="span">Peripheral Interrupt Request Register 4 (PIR4): TMR2/4/6<sup id="fnref:PIR4"><a class="footnote-ref" href="#fn:PIR4">10</a></sup></figcaption></p>
+<table>
+<thead>
+<tr>
+<th style="text-align: center;">Bit</th>
+<th style="text-align: center;">5</th>
+<th style="text-align: center;">3</th>
+<th style="text-align: center;">1</th>
+</tr>
+</thead>
+<tbody>
+<tr>
+<td style="text-align: center;"><strong>Campo</strong></td>
+<td style="text-align: center;">TMR6IF</td>
+<td style="text-align: center;">TMR4IF</td>
+<td style="text-align: center;">TMR2IF</td>
+</tr>
+<tr>
+<td style="text-align: center;"><strong>Permisos</strong></td>
+<td style="text-align: center;">R/W</td>
+<td style="text-align: center;">R/W</td>
+<td style="text-align: center;">R/W</td>
+</tr>
+<tr>
+<td style="text-align: center;"><strong>Reset</strong></td>
+<td style="text-align: center;">0</td>
+<td style="text-align: center;">0</td>
+<td style="text-align: center;">0</td>
+</tr>
+</tbody>
+</table>
+<ul>
+<li>Configura el PreScaler del TMRx en los bits <code>CKPS</code> del registro <code>TxCON</code>.</li>
+<li>Habilito el timer activando el bit <code>ON</code> del registro <code>TxCON</code>.</li>
+</ul>
+<p><figcaption markdown="span">Timer<em>x</em> Control Register (TxCON)<sup id="fnref:TMRxCON"><a class="footnote-ref" href="#fn:TMRxCON">11</a></sup></figcaption></p>
+<table>
+<thead>
+<tr>
+<th style="text-align: center;">Bit</th>
+<th style="text-align: center;">7</th>
+<th style="text-align: center;">6:4</th>
+<th style="text-align: center;">3:0</th>
+</tr>
+</thead>
+<tbody>
+<tr>
+<td style="text-align: center;"><strong>Campo</strong></td>
+<td style="text-align: center;">ON</td>
+<td style="text-align: center;">CKPS[2:0]</td>
+<td style="text-align: center;">OUTPS[3:0]</td>
+</tr>
+<tr>
+<td style="text-align: center;"><strong>Permisos</strong></td>
+<td style="text-align: center;">R/W/HC</td>
+<td style="text-align: center;">R/W</td>
+<td style="text-align: center;">R/W</td>
+</tr>
+<tr>
+<td style="text-align: center;"><strong>Reset</strong></td>
+<td style="text-align: center;">0</td>
+<td style="text-align: center;">000</td>
+<td style="text-align: center;">0000</td>
+</tr>
+</tbody>
+</table>
+<details class="example">
+<summary>Ejemplo: Configuración del TMRx</summary>
+<p>Para el Q10: Sigo el ejemplo del uso del TMR2.</p>
+<p><div class="language-c highlight"><pre><span></span><code><span id="__span-12-1"><a id="__codelineno-12-1" name="__codelineno-12-1" href="#__codelineno-12-1"></a><span class="n">PIR4bits</span><span class="p">.</span><span class="n">TMR2IF</span><span class="w"> </span><span class="o">=</span><span class="w"> </span><span class="mi">0</span><span class="p">;</span><span class="w">    </span><span class="c1">// Baja la bandera de interrupción del TMR2</span>
+</span><span id="__span-12-2"><a id="__codelineno-12-2" name="__codelineno-12-2" href="#__codelineno-12-2"></a><span class="n">T2CLKCON</span><span class="w"> </span><span class="o">=</span><span class="w"> </span><span class="mi">1</span><span class="p">;</span><span class="w">           </span><span class="c1">// Fuente de reloj = Fosc/4</span>
+</span><span id="__span-12-3"><a id="__codelineno-12-3" name="__codelineno-12-3" href="#__codelineno-12-3"></a><span class="n">T2CON</span><span class="w"> </span><span class="o">=</span><span class="w"> </span><span class="mh">0x80</span><span class="p">;</span><span class="w">           </span><span class="c1">// PreScaler 1:1, TMR2 habilitado</span>
+</span></code></pre></div>
+<div class="language-asm highlight"><pre><span></span><code><span id="__span-13-1"><a id="__codelineno-13-1" name="__codelineno-13-1" href="#__codelineno-13-1"></a><span class="nf">movlb</span><span class="w"> </span><span class="mi">0</span><span class="no">Eh</span><span class="w">               </span><span class="c1">; Banco 14</span>
+</span><span id="__span-13-2"><a id="__codelineno-13-2" name="__codelineno-13-2" href="#__codelineno-13-2"></a><span class="nf">bcf</span><span class="w"> </span><span class="no">PIR4</span><span class="p">,</span><span class="w"> </span><span class="mi">1</span><span class="p">,</span><span class="w"> </span><span class="no">b</span><span class="w">          </span><span class="c1">; Baja la bandera de interrupción del TMR2</span>
+</span><span id="__span-13-3"><a id="__codelineno-13-3" name="__codelineno-13-3" href="#__codelineno-13-3"></a><span class="nf">bsf</span><span class="w"> </span><span class="no">T2CLKCON</span><span class="p">,</span><span class="mi">0</span><span class="p">,</span><span class="w"> </span><span class="no">a</span><span class="w">       </span><span class="c1">; Fuente de reloj = Fosc/4. T2CLKCON.CS = 1</span>
+</span><span id="__span-13-4"><a id="__codelineno-13-4" name="__codelineno-13-4" href="#__codelineno-13-4"></a><span class="nf">bsf</span><span class="w"> </span><span class="no">T2CON</span><span class="p">,</span><span class="w"> </span><span class="mi">7</span><span class="p">,</span><span class="w"> </span><span class="no">a</span><span class="w">         </span><span class="c1">; PreScaler 1:1, TMR2 habilitado</span>
+</span></code></pre></div></p>
+</details>
+</li>
+<li>
+<p>Habilita la salida PWM:</p>
+<ul>
+<li>
+<p>Espera a que la bandera TMR2IF del registro PIR4 se active.</p>
+</li>
+<li>
+<p>Activa la salida del pin CCPx limpiando el bit TRIS asociado.</p>
+</li>
+</ul>
+<details class="example">
+<summary>Ejemplo: Habilitar la salida PWM</summary>
+<p>Para el Q10: Siguiendo el ejemplo, había asociado el pin RC0 al CCP1. Entonces, uso un algoritmo de "enclave" para habilitar la salida PWM:
+<div style="max-width: 200px; margin: 0 auto;">
+<pre class="mermaid"><code>    flowchart TD
+    A{PIR4.TMR2IF == 1}
+    B[TRISC.TRISC0 = 0]
+
+    A -- No --&gt; A
+    A -- Sí --&gt; B</code></pre>
+</div>
+De</p>
+<p><div class="language-c highlight"><pre><span></span><code><span id="__span-14-1"><a id="__codelineno-14-1" name="__codelineno-14-1" href="#__codelineno-14-1"></a><span class="k">while</span><span class="p">(</span><span class="o">!</span><span class="n">PIR4bits</span><span class="p">.</span><span class="n">TMR2IF</span><span class="p">);</span><span class="w">   </span><span class="c1">// Espero a que se active la bandera de interrupción del TMR2</span>
+</span><span id="__span-14-2"><a id="__codelineno-14-2" name="__codelineno-14-2" href="#__codelineno-14-2"></a><span class="n">TRISCbits</span><span class="p">.</span><span class="n">TRISC0</span><span class="w"> </span><span class="o">=</span><span class="w"> </span><span class="mi">0</span><span class="p">;</span><span class="w">     </span><span class="c1">// RC0 como salida</span>
+</span></code></pre></div>
+<div class="language-asm highlight"><pre><span></span><code><span id="__span-15-1"><a id="__codelineno-15-1" name="__codelineno-15-1" href="#__codelineno-15-1"></a><span class="nf">movlb</span><span class="w"> </span><span class="mi">0</span><span class="no">Eh</span><span class="w">               </span><span class="c1">; Banco 14</span>
+</span><span id="__span-15-2"><a id="__codelineno-15-2" name="__codelineno-15-2" href="#__codelineno-15-2"></a><span class="nf">btfss</span><span class="w"> </span><span class="no">PIR4</span><span class="p">,</span><span class="w"> </span><span class="mi">1</span><span class="p">,</span><span class="w"> </span><span class="no">b</span><span class="w">        </span><span class="c1">; Espero a que se active la bandera de interrupción </span>
+</span><span id="__span-15-3"><a id="__codelineno-15-3" name="__codelineno-15-3" href="#__codelineno-15-3"></a><span class="nf">bra</span><span class="w"> </span><span class="no">$-2</span>
+</span><span id="__span-15-4"><a id="__codelineno-15-4" name="__codelineno-15-4" href="#__codelineno-15-4"></a><span class="nf">bcf</span><span class="w"> </span><span class="no">TRISC</span><span class="p">,</span><span class="w"> </span><span class="mi">0</span><span class="p">,</span><span class="w"> </span><span class="no">a</span><span class="w">         </span><span class="c1">; RC0 como salida</span>
+</span></code></pre></div></p>
+</details>
+</li>
+</ol>
+<h3 id="pasos-para-configurar-el-modo-pwm-forma-rapida">Pasos para configurar el modo PWM: Forma rápida<a class="headerlink" href="#pasos-para-configurar-el-modo-pwm-forma-rapida" title="Permanent link">&para;</a></h3>
+<p>Los pasos anteriormente expuestos son la forma <strong>larga</strong>, pero más <strong>segura</strong>, de configurar el modo PWM. Si no es importante evitar los "pulsos basura" durante la configuración, puedes ignorar el paso 6 y 5.1, y configurar el pin como salida desde el principio.</p>
+<details class="example">
+<summary>Configuración rápida del modo PWM</summary>
+<p>Para el Q10: Modificaré el ejemplo anterior para configurar el modo PWM de forma rápida. Las suposiciones del reloj y los cálculos para el periodo y duty cycle de la señal PWM siguen siendo los mismos, así que solo mostraré el código de configuración:</p>
+<div class="language-c highlight"><pre><span></span><code><span id="__span-16-1"><a id="__codelineno-16-1" name="__codelineno-16-1" href="#__codelineno-16-1"></a><span class="n">CCPTMRSbits</span><span class="p">.</span><span class="n">C1TSEL</span><span class="w"> </span><span class="o">=</span><span class="w"> </span><span class="mi">1</span><span class="p">;</span><span class="w"> </span><span class="c1">// CCP1 -&gt; TMR2</span>
+</span><span id="__span-16-2"><a id="__codelineno-16-2" name="__codelineno-16-2" href="#__codelineno-16-2"></a><span class="n">RC0PPS</span><span class="w"> </span><span class="o">=</span><span class="w"> </span><span class="mh">0x05</span><span class="p">;</span><span class="w">          </span><span class="c1">// RC0 -&gt; CCP1</span>
+</span><span id="__span-16-3"><a id="__codelineno-16-3" name="__codelineno-16-3" href="#__codelineno-16-3"></a><span class="n">TRISCbits</span><span class="p">.</span><span class="n">TRISC0</span><span class="w"> </span><span class="o">=</span><span class="w"> </span><span class="mi">0</span><span class="p">;</span><span class="w">   </span><span class="c1">// RC0 como salida</span>
+</span><span id="__span-16-4"><a id="__codelineno-16-4" name="__codelineno-16-4" href="#__codelineno-16-4"></a><span class="n">T2PR</span><span class="w"> </span><span class="o">=</span><span class="w"> </span><span class="mi">199</span><span class="p">;</span><span class="w">             </span><span class="c1">// Periodo de la señal PWM = 200 us</span>
+</span><span id="__span-16-5"><a id="__codelineno-16-5" name="__codelineno-16-5" href="#__codelineno-16-5"></a><span class="n">CCP1CON</span><span class="w"> </span><span class="o">=</span><span class="w"> </span><span class="mh">0x9C</span><span class="p">;</span><span class="w">         </span><span class="c1">// Modo PWM, justificado a la izquierda</span>
+</span><span id="__span-16-6"><a id="__codelineno-16-6" name="__codelineno-16-6" href="#__codelineno-16-6"></a><span class="n">CCPR1H</span><span class="w"> </span><span class="o">=</span><span class="w"> </span><span class="mh">0x32</span><span class="p">;</span>
+</span><span id="__span-16-7"><a id="__codelineno-16-7" name="__codelineno-16-7" href="#__codelineno-16-7"></a><span class="n">CCPR1L</span><span class="w"> </span><span class="o">=</span><span class="w"> </span><span class="mi">0</span><span class="p">;</span><span class="w">             </span><span class="c1">// Duty cycle = 25%</span>
+</span><span id="__span-16-8"><a id="__codelineno-16-8" name="__codelineno-16-8" href="#__codelineno-16-8"></a><span class="n">T2CLKCON</span><span class="w"> </span><span class="o">=</span><span class="w"> </span><span class="mi">1</span><span class="p">;</span><span class="w">           </span><span class="c1">// Fuente de reloj = Fosc/4</span>
+</span><span id="__span-16-9"><a id="__codelineno-16-9" name="__codelineno-16-9" href="#__codelineno-16-9"></a><span class="n">T2CON</span><span class="w"> </span><span class="o">=</span><span class="w"> </span><span class="mh">0x80</span><span class="p">;</span><span class="w">           </span><span class="c1">// PreScaler 1:1, TMR2 habilitado</span>
+</span></code></pre></div>
+</details>
+<h3 id="proyectos">Proyectos<a class="headerlink" href="#proyectos" title="Permanent link">&para;</a></h3>
+<p>Te dejo algunos proyectos relacionados con el módulo CCP en modo PWM para que puedas adjuntarlo a tu IA de confianza y ver cómo se configura el módulo CCP en otros contextos.</p>
+<ul>
+<li></li>
+</ul>
+<h2 id="referencias">Referencias<a class="headerlink" href="#referencias" title="Permanent link">&para;</a></h2>
+<div class="footnote">
+<hr />
+<ol>
+<li id="fn:3">
+<p>Microchip Technology Inc. (2020). <em>PIC18F27/47Q10 Microcontroller Data Sheet</em>. Sección 22.4.1, "Standard PWM Operation". <a href="https://ww1.microchip.com/downloads/aemDocuments/documents/MCU08/ProductDocuments/DataSheets/PIC18F27-47Q10-Micorcontroller-Data-Sheet-DS40002043.pdf#page=351">Ver PDF (Pág. 351)</a>.&#160;<a class="footnote-backref" href="#fnref:3" title="Jump back to footnote 1 in the text">&#8617;</a></p>
+</li>
+<li id="fn:1">
+<p>Microchip Technology Inc. (2020). <em>PIC18F27/47Q10 Microcontroller Data Sheet</em>. Sección 22.6.4, "CCPTMRS". <a href="https://ww1.microchip.com/downloads/aemDocuments/documents/MCU08/ProductDocuments/DataSheets/PIC18F27-47Q10-Micorcontroller-Data-Sheet-DS40002043.pdf#page=359">Ver PDF (Pág. 359)</a>.&#160;<a class="footnote-backref" href="#fnref:1" title="Jump back to footnote 2 in the text">&#8617;</a></p>
+</li>
+<li id="fn:2">
+<p>Microchip Technology Inc. (2021). <em>PIC18F27/47/57Q43 Microcontroller Data Sheet</em>. Sección 29.1.1, "CCPTMRS0". <a href="https://ww1.microchip.com/downloads/aemDocuments/documents/MCU08/ProductDocuments/DataSheets/PIC18F27-47-57Q43-Microcontroller-Data-Sheet-XLP-DS40002147.pdf#page=463">Ver PDF (Pág. 463)</a>.&#160;<a class="footnote-backref" href="#fnref:2" title="Jump back to footnote 3 in the text">&#8617;</a></p>
+</li>
+<li id="fn:f_Tpwm">
+<p>Microchip Technology Inc. (2020). <em>PIC18F27/47Q10 Microcontroller Data Sheet</em>. Sección 22.4.4, "PWM Period". <a href="https://ww1.microchip.com/downloads/aemDocuments/documents/MCU08/ProductDocuments/DataSheets/PIC18F27-47Q10-Micorcontroller-Data-Sheet-DS40002043.pdf#page=352">Ver PDF (Pág. 352)</a>.&#160;<a class="footnote-backref" href="#fnref:f_Tpwm" title="Jump back to footnote 4 in the text">&#8617;</a></p>
+</li>
+<li id="fn:f_Ton">
+<p>Microchip Technology Inc. (2020). <em>PIC18F27/47Q10 Microcontroller Data Sheet</em>. Sección 22.4.5, "PWM Duty Cycle". <a href="https://ww1.microchip.com/downloads/aemDocuments/documents/MCU08/ProductDocuments/DataSheets/PIC18F27-47Q10-Micorcontroller-Data-Sheet-DS40002043.pdf#page=353">Ver PDF (Pág. 353)</a>.&#160;<a class="footnote-backref" href="#fnref:f_Ton" title="Jump back to footnote 5 in the text">&#8617;</a></p>
+</li>
+<li id="fn:setup_pwm">
+<p>Microchip Technology Inc. (2020). <em>PIC18F27/47Q10 Microcontroller Data Sheet</em>. Sección 22.4.2, "Setup for PWM Operation". <a href="https://ww1.microchip.com/downloads/aemDocuments/documents/MCU08/ProductDocuments/DataSheets/PIC18F27-47Q10-Micorcontroller-Data-Sheet-DS40002043.pdf#page=351">Ver PDF (Pág. 351)</a>.&#160;<a class="footnote-backref" href="#fnref:setup_pwm" title="Jump back to footnote 6 in the text">&#8617;</a></p>
+</li>
+<li id="fn:CCP_codes_Q10">
+<p>Microchip Technology Inc. (2020). <em>PIC18F27/47Q10 Microcontroller Data Sheet</em>. Sección 18.2, "PPS Outputs". <a href="https://ww1.microchip.com/downloads/aemDocuments/documents/MCU08/ProductDocuments/DataSheets/PIC18F27-47Q10-Micorcontroller-Data-Sheet-DS40002043.pdf#page=287">Ver PDF (Pág. 287)</a>.&#160;<a class="footnote-backref" href="#fnref:CCP_codes_Q10" title="Jump back to footnote 7 in the text">&#8617;</a><a class="footnote-backref" href="#fnref2:CCP_codes_Q10" title="Jump back to footnote 7 in the text">&#8617;</a></p>
+</li>
+<li id="fn:CCP_codes_Q43">
+<p>Microchip Technology Inc. (2021). <em>PIC18F27/47/57Q43 Microcontroller Data Sheet</em>. Sección 21.3, "PPS Outputs". <a href="https://ww1.microchip.com/downloads/aemDocuments/documents/MCU08/ProductDocuments/DataSheets/PIC18F27-47-57Q43-Microcontroller-Data-Sheet-XLP-DS40002147.pdf#page=344">Ver PDF (Pág. 344)</a>.&#160;<a class="footnote-backref" href="#fnref:CCP_codes_Q43" title="Jump back to footnote 8 in the text">&#8617;</a></p>
+</li>
+<li id="fn:CCPxCON">
+<p>Microchip Technology Inc. (2020). <em>PIC18F27/47Q10 Microcontroller Data Sheet</em>. Sección 22.6.1, "CCPxCON". <a href="https://ww1.microchip.com/downloads/aemDocuments/documents/MCU08/ProductDocuments/DataSheets/PIC18F27-47Q10-Micorcontroller-Data-Sheet-DS40002043.pdf#page=356">Ver PDF (Pág. 356)</a>.&#160;<a class="footnote-backref" href="#fnref:CCPxCON" title="Jump back to footnote 9 in the text">&#8617;</a></p>
+</li>
+<li id="fn:PIR4">
+<p>Microchip Technology Inc. (2020). <em>PIC18F27/47Q10 Microcontroller Data Sheet</em>. Sección 15.13.6, "PIR4". <a href="https://ww1.microchip.com/downloads/aemDocuments/documents/MCU08/ProductDocuments/DataSheets/PIC18F27-47Q10-Micorcontroller-Data-Sheet-DS40002043.pdf#page=203">Ver PDF (Pág. 203)</a>.&#160;<a class="footnote-backref" href="#fnref:PIR4" title="Jump back to footnote 10 in the text">&#8617;</a></p>
+</li>
+<li id="fn:TMRxCON">
+<p>Microchip Technology Inc. (2020). <em>PIC18F27/47Q10 Microcontroller Data Sheet</em>. Sección 21.9.3, "TxCON". <a href="https://ww1.microchip.com/downloads/aemDocuments/documents/MCU08/ProductDocuments/DataSheets/PIC18F27-47Q10-Micorcontroller-Data-Sheet-DS40002043.pdf#page=341">Ver PDF (Pág. 341)</a>.&#160;<a class="footnote-backref" href="#fnref:TMRxCON" title="Jump back to footnote 11 in the text">&#8617;</a></p>
+</li>
+</ol>
+</div>
+
+
+
+
+
+
+
+  
+  
+
+
+
+
+
+
+                
+              </article>
+            </div>
+          
+          
+<script>var target=document.getElementById(location.hash.slice(1));target&&target.name&&(target.checked=target.name.startsWith("__tabbed_"))</script>
+        </div>
+        
+          <button type="button" class="md-top md-icon" data-md-component="top" hidden>
+  
+  <svg xmlns="http://www.w3.org/2000/svg" viewBox="0 0 24 24"><path d="M13 20h-2V8l-5.5 5.5-1.42-1.42L12 4.16l7.92 7.92-1.42 1.42L13 8z"/></svg>
+  Volver al principio
+</button>
+        
+      </main>
+      
+        <footer class="md-footer">
+  
+    
+      
+      <nav class="md-footer__inner md-grid" aria-label="Pie" >
+        
+          
+          <a href="../interrupciones/" class="md-footer__link md-footer__link--prev" aria-label="Anterior: Interrupciones">
+            <div class="md-footer__button md-icon">
+              
+              <svg xmlns="http://www.w3.org/2000/svg" viewBox="0 0 24 24"><path d="M20 11v2H8l5.5 5.5-1.42 1.42L4.16 12l7.92-7.92L13.5 5.5 8 11z"/></svg>
+            </div>
+            <div class="md-footer__title">
+              <span class="md-footer__direction">
+                Anterior
+              </span>
+              <div class="md-ellipsis">
+                Interrupciones
+              </div>
+            </div>
+          </a>
+        
+        
+          
+          <a href="../../proyectos/" class="md-footer__link md-footer__link--next" aria-label="Siguiente: Proyectos">
+            <div class="md-footer__title">
+              <span class="md-footer__direction">
+                Siguiente
+              </span>
+              <div class="md-ellipsis">
+                Proyectos
+              </div>
+            </div>
+            <div class="md-footer__button md-icon">
+              
+              <svg xmlns="http://www.w3.org/2000/svg" viewBox="0 0 24 24"><path d="M4 11v2h12l-5.5 5.5 1.42 1.42L19.84 12l-7.92-7.92L10.5 5.5 16 11z"/></svg>
+            </div>
+          </a>
+        
+      </nav>
+    
+  
+  <div class="md-footer-meta md-typeset">
+    <div class="md-footer-meta__inner md-grid">
+      <div class="md-copyright">
+  
+    <div class="md-copyright__highlight">
+      Copyright &copy; 2025 – 2026 David Díaz ·  Favicon by <a href="https://www.flaticon.com/free-icons/microcontroller" title="microcontroller icons">Bombasticon Studio</a> from Flaticon
+
+    </div>
+  
+  
+    Made with
+    <a href="https://squidfunk.github.io/mkdocs-material/" target="_blank" rel="noopener">
+      Material for MkDocs
+    </a>
+  
+</div>
+      
+        
+<div class="md-social">
+  
+    
+    
+    
+    
+    <a href="https://github.com/remgo696" target="_blank" rel="noopener" title="GitHub" class="md-social__link">
+      <svg xmlns="http://www.w3.org/2000/svg" viewBox="0 0 512 512"><!--! Font Awesome Free 7.1.0 by @fontawesome - https://fontawesome.com License - https://fontawesome.com/license/free (Icons: CC BY 4.0, Fonts: SIL OFL 1.1, Code: MIT License) Copyright 2025 Fonticons, Inc.--><path d="M173.9 397.4c0 2-2.3 3.6-5.2 3.6-3.3.3-5.6-1.3-5.6-3.6 0-2 2.3-3.6 5.2-3.6 3-.3 5.6 1.3 5.6 3.6m-31.1-4.5c-.7 2 1.3 4.3 4.3 4.9 2.6 1 5.6 0 6.2-2s-1.3-4.3-4.3-5.2c-2.6-.7-5.5.3-6.2 2.3m44.2-1.7c-2.9.7-4.9 2.6-4.6 4.9.3 2 2.9 3.3 5.9 2.6 2.9-.7 4.9-2.6 4.6-4.6-.3-1.9-3-3.2-5.9-2.9M252.8 8C114.1 8 8 113.3 8 252c0 110.9 69.8 205.8 169.5 239.2 12.8 2.3 17.3-5.6 17.3-12.1 0-6.2-.3-40.4-.3-61.4 0 0-70 15-84.7-29.8 0 0-11.4-29.1-27.8-36.6 0 0-22.9-15.7 1.6-15.4 0 0 24.9 2 38.6 25.8 21.9 38.6 58.6 27.5 72.9 20.9 2.3-16 8.8-27.1 16-33.7-55.9-6.2-112.3-14.3-112.3-110.5 0-27.5 7.6-41.3 23.6-58.9-2.6-6.5-11.1-33.3 2.6-67.9 20.9-6.5 69 27 69 27 20-5.6 41.5-8.5 62.8-8.5s42.8 2.9 62.8 8.5c0 0 48.1-33.6 69-27 13.7 34.7 5.2 61.4 2.6 67.9 16 17.7 25.8 31.5 25.8 58.9 0 96.5-58.9 104.2-114.8 110.5 9.2 7.9 17 22.9 17 46.4 0 33.7-.3 75.4-.3 83.6 0 6.5 4.6 14.4 17.3 12.1C436.2 457.8 504 362.9 504 252 504 113.3 391.5 8 252.8 8M105.2 352.9c-1.3 1-1 3.3.7 5.2 1.6 1.6 3.9 2.3 5.2 1 1.3-1 1-3.3-.7-5.2-1.6-1.6-3.9-2.3-5.2-1m-10.8-8.1c-.7 1.3.3 2.9 2.3 3.9 1.6 1 3.6.7 4.3-.7.7-1.3-.3-2.9-2.3-3.9-2-.6-3.6-.3-4.3.7m32.4 35.6c-1.6 1.3-1 4.3 1.3 6.2 2.3 2.3 5.2 2.6 6.5 1 1.3-1.3.7-4.3-1.3-6.2-2.2-2.3-5.2-2.6-6.5-1m-11.4-14.7c-1.6 1-1.6 3.6 0 5.9s4.3 3.3 5.6 2.3c1.6-1.3 1.6-3.9 0-6.2-1.4-2.3-4-3.3-5.6-2"/></svg>
+    </a>
+  
+</div>
+      
+    </div>
+  </div>
+</footer>
+      
+    </div>
+    <div class="md-dialog" data-md-component="dialog">
+      <div class="md-dialog__inner md-typeset"></div>
+    </div>
+    
+    
+    
+      
+      
+      <script id="__config" type="application/json">{"annotate": null, "base": "../..", "features": ["navigation.tabs", "navigation.tabs.sticky", "navigation.sections", "navigation.top", "navigation.footer", "search.suggest", "search.highlight", "content.code.copy", "content.code.annotate", "toc.follow"], "search": "../../assets/javascripts/workers/search.2c215733.min.js", "tags": null, "translations": {"clipboard.copied": "Copiado al portapapeles", "clipboard.copy": "Copiar al portapapeles", "search.result.more.one": "1 m\u00e1s en esta p\u00e1gina", "search.result.more.other": "# m\u00e1s en esta p\u00e1gina", "search.result.none": "No se encontraron documentos", "search.result.one": "1 documento encontrado", "search.result.other": "# documentos encontrados", "search.result.placeholder": "Teclee para comenzar b\u00fasqueda", "search.result.term.missing": "Falta", "select.version": "Seleccionar versi\u00f3n"}, "version": null}</script>
+    
+    
+      <script src="../../assets/javascripts/bundle.79ae519e.min.js"></script>
+      
+        <script src="../../assets/js/mathjax.js"></script>
+      
+        <script src="https://unpkg.com/mathjax@3/es5/tex-mml-chtml.js"></script>
+      
+    
+  </body>
+</html>
