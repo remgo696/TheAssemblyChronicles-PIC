@@ -1,5 +1,5 @@
-#ifndef LCD_LIB_H_
-#define	LCD_LIB_H_
+#ifndef LCD_H
+#define	LCD_H
 
 /*==============================================================================
  *  LIBRERÍA LCD 16x2 — Interfaz 4 bits
@@ -20,9 +20,8 @@
  *  Pines de datos (4 pines del puerto LCD_DATA_PORT):
  *      bit 4 → D4      bit 5 → D5      bit 6 → D6      bit 7 → D7
  *
- *  ⚠ ADVERTENCIA — Pines compartidos con el debugger (Curiosity Nano):
- *      • PIC18F47Q10  : RD0 y RD1 están conectados al debugger.
- *      • PIC18F57Q43  : RF0 y RF1 están conectados al debugger.
+ *  ⚠ ADVERTENCIA (Curiosity Nano): Pines compartidos con el debugger :
+ *      • PIC18F47Q10: RD0 y RD1            • PIC18F57Q43: RF0 y RF1
  *
  *============================================================================*/
 
@@ -87,4 +86,4 @@ void LCD_CHAR_GRADO(void);
 void LCD_VARCHAR_BITS(unsigned char dato);
 void GENERACARACTER(const unsigned char *vector, unsigned char pos);
 
-#endif	/* LCD_LIB_H_ */
+#endif	/* LCD_H */
